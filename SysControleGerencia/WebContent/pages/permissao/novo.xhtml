@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Cadastro de Permissão </STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+
+			<p:commandButton class="btn btn-danger btn-md"
+				value="#{msg['voltar']}" action="#{permissaoBean.showFormListar}"
+				immediate="true" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['salvar']}" action="#{permissaoBean.salvar}"
+				update="@form" rendered="#{permissaoBean.viewState eq 'NOVO'}"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['atualizar']}" action="#{permissaoBean.alterar}"
+				update=":messages" rendered="#{permissaoBean.viewState eq 'EDITAR'}"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+		</div>
+	</ui:define>
+
+
+	<ui:define name="corpo">
+		<f:metadata>
+			<f:viewAction action="#{permissaoBean.initForm(param.permissaoId)}" />
+		</f:metadata>
+
+		<!-- DIV PRINCIPAL -->
+		<div class="box-body">
+			<div class="row">
+
+				<!-- DIV DA Coluna -->
+				<div class="col-md-6">
+					<!-- -->
+					<div class="form-group">
+						<label>#{msg['nome']}</label>
+						<p:inputText maxlength="50" styleClass="form-control"
+							label="#{msg['nome']}" value="#{permissaoBean.permissao.nome}"
+							required="true" />
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<!-- DIV DO ELEMTNO -->
+					<div class="form-group">
+						<label>#{msg['descricao']}</label>
+						<p:inputText maxlength="100" styleClass="form-control"
+							label="#{msg['descricao']}"
+							value="#{permissaoBean.permissao.descricao}" required="true"
+							id="nome" />
+					</div>
+
+				</div>
+
+
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>
+
+</html>

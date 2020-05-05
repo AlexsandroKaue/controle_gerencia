@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="index.xhtml">
+
+
+		<ui:define name="nome_pagina">
+		 <h1>
+		Consulta de Usuários
+          </h1>
+		</ui:define>
+		
+		<ui:define name="corpo">
+ 
+                <p:dataTable id="tbGrupo" styleClass="table" rows="10" var="grupo" paginator="true" value="#{grupoBean.grupoList}" paginatorPosition="bottom" paginatorAlwaysVisible="false" emptyMessage="#{msg['lista.vazia']}">
+
+	                    <p:column headerText="#{msg['grupo.nome']}">
+	                        #{grupo.nome}
+	                    </p:column>
+
+	                    <p:column width="60%" styleClass="align-center" headerText="#{msg['grupo.descricao']}">
+	                        #{grupo.descricao}
+	                    </p:column>
+
+	                    <p:column width="15%" styleClass="align-center" headerText="#{msg['acao']}">
+	                   
+	                    </p:column>
+
+	                    <f:facet name="footer">
+							<h:outputText value="#{msg['lista.totalRegistros']} #{grupoBean.grupoList.size()}" />
+						</f:facet>
+
+	                </p:dataTable>
+	                
+ 
+ 
+
+		</ui:define>
+
+
+	</ui:composition>
+
+</html>

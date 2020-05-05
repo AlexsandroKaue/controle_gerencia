@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>#{msg['consulta.grupo']}</STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['novo']}" action="#{grupoBean.showFormNovo}"
+				immediate="true"
+				rendered="#{usuarioWeb.temPermissao('INCLUIR_GRUPO')}" />
+		</div>
+	</ui:define>
+	
+	<ui:define name="acessoNaoPermitido">
+		<ui:fragment rendered="#{!usuarioWeb.temPermissao('LISTAR_GRUPO')}">
+			<div>
+				<h1 class="login-box-msg">
+					<h:graphicImage library="img" name="aviso.png" alt="User Image"
+						class="img-circle" />
+					<STRONG>#{msg['acesso.nao.permitido']}</STRONG>
+				</h1>
+			</div>
+		</ui:fragment>
+	</ui:define>
+
+	<ui:define name="corpo">
+
+		<ui:fragment rendered="#{usuarioWeb.temPermissao('LISTAR_GRUPO')}">
+			<div class="box box-widget collapsed-box">
+				<div class="box-header with-border">
+					<div class="user-block">
+						<ul class="sidebar-menu">
+							<li class="active"><i class="fa fa-search"></i> <label><b>#{msg['filtros']}</b></label></li>
+						</ul>
+					</div>
+
+					<!-- /.user-block -->
+					<div class="box-tools">
+						<button type="button" class="btn btn-box-tool"
+							data-widget="collapse">
+							<i class="fa fa-plus"></i>
+						</button>
+
+					</div>
+
+					<!-- /.box-tools -->
+				</div>
+
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="pull-right">
+
+						<p:commandButton update="@form" value="#{msg['limpar']}"
+							class="btn btn-danger btn-xs" action="#{grupoBean.listar}">
+							<f:setPropertyActionListener target="#{grupoBean.pesquisa}"
+								value="" />
+						</p:commandButton>
+
+
+						<p:commandButton class="btn btn-primary btn-xs" update="tbGrupo"
+							value="#{msg['filtrar']}" action="#{grupoBean.listar}" />
+						<br />
+					</div>
+
+					<div class="row">
+
+						<!-- DIV DA Coluna -->
+						<div class="col-md-6">
+							<!-- DIV DO ELEMTNO -->
+							<div class="form-group">
+								<label><b>#{msg['pesquisa']}</b></label>
+								<p:inputText id="pesquisa" maxlength="100"
+									styleClass="form-control" label="#{msg['descricao']}"
+									value="#{grupoBean.pesquisa}" />
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+			
+			<p:dataTable id="tbGrupo" rows="10" var="grupo" paginator="true"
+				value="#{grupoBean.grupoList}" paginatorPosition="bottom"
+				paginatorAlwaysVisible="false" emptyMessage="#{msg['lista.vazia']}" widgetVar="grupos" filteredValue="#{grupoBean.filteredGrupos}">
+
+				<f:facet name="header">
+		            <p:outputPanel>
+		                <h:outputText value="Search all fields:" />
+		                <p:inputText id="globalFilter" onkeyup="PF('grupos').filter()" style="width:150px" placeholder="Enter keyword"/>
+		            </p:outputPanel>
+        		</f:facet>
+
+				<p:column headerText="#{msg['nome']}" styleClass="align-center" sortBy="#{grupo.nome}" filterBy="#{grupo.nome}" filterMatchMode="contains">
+			              #{grupo.nome}
+			          </p:column>
+
+				<p:column width="55%" headerText="#{msg['descricao']}" styleClass="align-center" sortBy="#{grupo.descricao}" filterBy="#{grupo.descricao}" filterMatchMode="contains">
+			              #{grupo.descricao}
+			          </p:column>
+
+				<p:column width="15%" headerText="#{msg['acao']}"
+					styleClass="align-center">
+					<p:commandButton icon="ui-icon-pencil" title="#{msg['editar']}"
+						class="btn btn-primary btn-xs"
+						action="#{grupoBean.showFormEditar(grupo.id)}" immediate="true"
+						rendered="#{usuarioWeb.temPermissao('ALTERAR_GRUPO')}" />
+
+					<p:spacer width="10" />
+
+					<p:commandButton icon="ui-icon-trash" title="#{msg['excluir']}"
+						class="btn btn-danger btn-xs"
+						actionListener="#{grupoBean.remover(grupo)}"
+						update="tbGrupo :messages" immediate="true"
+						oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')"
+						rendered="#{usuarioWeb.temPermissao('EXCLUIR_GRUPO')}">
+
+						<p:confirm header="Excluir Bacia"
+							message="Deseja excluir o registro em definitivo?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+
+				</p:column>
+
+
+				<f:facet name="footer">
+					<h:outputText
+						value="#{msg['lista.totalRegistros']} #{grupoBean.grupoList.size()}" />
+				</f:facet>
+
+			</p:dataTable>
+
+		</ui:fragment>
+	</ui:define>
+
+</ui:composition>
+
+</html>

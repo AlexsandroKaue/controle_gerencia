@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>#{msg['consulta.usuario']}</STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton styleClass="btn-block btn-primary"
+				value="Show Usuários"
+				onclick="PF('dlg1').show()"
+				immediate="true"
+				><!-- rendered="#{usuarioWeb.temPermissao('INCLUIR_USUARIO')}" -->
+			</p:commandButton>
+		</div>
+	</ui:define>
+
+	<ui:define name="acessoNaoPermitido">
+		<ui:fragment> <!-- rendered="#{!usuarioWeb.temPermissao('LISTAR_USUARIO')}" -->
+			<div>
+				<h1 class="login-box-msg">
+					<h:graphicImage library="img" name="aviso.png" alt="User Image"
+						class="img-circle" />
+					<STRONG>#{msg['acesso.nao.permitido']}</STRONG>
+				</h1>
+			</div>
+		</ui:fragment>
+	</ui:define>
+
+	<ui:define name="corpo">
+
+		<p:dialog header="Informações Do Filtro" widgetVar="dlg1" modal="true" id="solicitanteDialog" width="500px" resizable="false">
+		
+			<div class="box-body">
+				<div class="form-group">
+					<div class="row invoice-info">
+						<div class="col-sm-12 invoice-col">
+						
+							<ui:repeat var="u" value="#{usuarioBean.usuarioBizagiList}">
+							
+								<div class="ui-g">
+								    <div class="ui-g-6"><b>Usuário: </b></div>
+								    <div class="ui-g-6"><h:outputLabel value="#{u.nome}"></h:outputLabel></div>
+							    </div>
+						    </ui:repeat>
+					    
+					    
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.box-body -->
+
+			<div class="box-footer">
+				<div class="pull-right box-tools">
+
+					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+						onclick="PF('dlg1').hide();" />
+				</div>
+			</div>
+		</p:dialog>
+		
+	</ui:define>
+
+
+</ui:composition>
+
+</html>

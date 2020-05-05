@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Cadastro de Grupo </STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+
+			<p:commandButton class="btn btn-danger btn-md"
+				value="#{msg['voltar']}" action="#{grupoBean.showFormListar}"
+				immediate="true" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['salvar']}" action="#{grupoBean.salvar}" update="@form"
+				rendered="#{grupoBean.viewState eq 'NOVO'}"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['atualizar']}" action="#{grupoBean.alterar}"
+				update=":messages" rendered="#{grupoBean.viewState eq 'EDITAR'}"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+		</div>
+	</ui:define>
+
+
+	<ui:define name="corpo">
+		<f:metadata>
+			<f:viewAction action="#{grupoBean.initForm(param.grupoId)}" />
+		</f:metadata>
+
+		<!-- DIV PRINCIPAL -->
+		<div class="box-body">
+			<div class="row">
+
+				<!-- DIV DA Coluna -->
+				<div class="col-md-6">
+					<!-- -->
+					<div class="form-group">
+						<label>#{msg['nome']}</label>
+						<p:inputText maxlength="100" styleClass="form-control"
+							label="#{msg['nome']}" value="#{grupoBean.grupo.nome}"
+							required="true" />
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<!-- DIV DO ELEMTNO -->
+					<div class="form-group">
+						<label>#{msg['descricao']}</label>
+						<p:inputText maxlength="20" styleClass="form-control"
+							label="#{msg['descricao']}" value="#{grupoBean.grupo.descricao}"
+							required="true" id="nome" />
+					</div>
+
+				</div>
+
+
+				<div class="col-md-12">
+					<div class="form-group">
+						<label>Permissões Para Esse Grupo</label>
+
+						<p:pickList id="permissaoPickList"
+							value="#{grupoBean.permissaoPickList}" var="permissao"
+							itemLabel="#{permissao.nome}" itemValue="#{permissao}"
+							converter="genericPickListCvt" responsive="true"
+							showSourceFilter="true" showTargetFilter="true"
+							filterMatchMode="contains">
+
+							<f:facet name="sourceCaption">Permissões</f:facet>
+							<f:facet name="targetCaption">Permissões do Grupo</f:facet>
+
+						</p:pickList>
+					</div>
+				</div>
+
+			</div>
+			
+			<!-- MAP & BOX PANE -->
+          <div class="box box-success">
+            <div class="box-header with-border">
+              <h3 class="box-title">Visitors Report</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+              <div class="row">
+                <div class="col-md-9 col-sm-8">
+                  <div class="pad">
+                    <!-- Map will be created here -->
+                    <div id="world-map-markers" style="height: 325px;"></div>
+                  </div>
+                </div>
+                <!-- /.col -->
+                <div class="col-md-3 col-sm-4">
+                  <div class="pad box-pane-right bg-green" style="min-height: 280px">
+                    <div class="description-block margin-bottom">
+                      <div class="sparkbar pad" data-color="#fff">90,70,90,70,75,80,70</div>
+                      <h5 class="description-header">8390</h5>
+                      <span class="description-text">Visits</span>
+                    </div>
+                    <!-- /.description-block -->
+                    <div class="description-block margin-bottom">
+                      <div class="sparkbar pad" data-color="#fff">90,50,90,70,61,83,63</div>
+                      <h5 class="description-header">30%</h5>
+                      <span class="description-text">Referrals</span>
+                    </div>
+                    <!-- /.description-block -->
+                    <div class="description-block">
+                      <div class="sparkbar pad" data-color="#fff">90,50,90,70,61,83,63</div>
+                      <h5 class="description-header">70%</h5>
+                      <span class="description-text">Organic</span>
+                    </div>
+                    <!-- /.description-block -->
+                  </div>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </div>
+            <!-- /.box-body -->
+          </div>
+          
+		</div>
+	</ui:define>
+
+</ui:composition>
+
+</html>

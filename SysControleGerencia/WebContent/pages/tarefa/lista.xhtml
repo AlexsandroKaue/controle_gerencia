@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Conjuntoes</STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton styleClass="btn-block btn-primary"
+				value="#{msg['novo']}" action="#{conjuntoBean.showFormNovo}"
+				><!-- rendered="#{usuarioBizagiWeb.temPermissao('INCLUIR_USUARIO')}" -->
+			</p:commandButton>
+		</div>
+	</ui:define>
+
+	<ui:define name="corpo">
+
+		<ui:fragment> <!-- rendered="#{usuarioBizagiWeb.temPermissao('LISTAR_USUARIO')}" -->
+
+			<p:dataTable id="tbConjunto" rows="10" var="conjunto" paginator="true"
+				value="#{conjuntoBean.conjuntoList}" paginatorPosition="bottom"
+				paginatorAlwaysVisible="false" emptyMessage="#{msg['lista.vazia']}">
+
+				<p:column headerText="Código" styleClass="align-center">
+	            	#{conjunto.id}
+	            </p:column>
+	            
+	            <p:column headerText="Nome" styleClass="align-center">
+	            	#{conjunto.nome}
+	            </p:column>
+
+				<p:column width="15%" headerText="#{msg['acao']}"
+					styleClass="align-center">
+					<p:commandButton icon="ui-icon-pencil" title="#{msg['editar']}"
+						class="btn btn-primary btn-xs"
+						action="#{conjuntoBean.showFormEditar(conjunto.id)}"
+						/><!-- rendered="#{usuarioWeb.temPermissao('ALTERAR_FERIADO')}"  -->
+
+					<p:spacer width="10" />
+					
+					<p:commandButton icon="ui-icon-search"
+						title="Visualizar Detalhes do Conjunto"
+						class="btn btn-warning btn-xs"
+						action="#{conjuntoBean.showFormVisualizar(conjunto.id)}" />
+					
+					<p:spacer width="10" />
+
+					<p:commandButton icon="ui-icon-trash"
+						title="#{msg['excluir']}" class="btn btn-danger btn-xs"
+						actionListener="#{conjuntoBean.remover(conjunto)}" update="tbConjunto messages"
+						> <!-- rendered="#{usuarioWeb.temPermissao('EXCLUIR_FERIADO')}" -->
+						<p:confirm header="Excluir Feriado"
+							message="Deseja excluir o registro em definitivo?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+
+				</p:column>
+
+				<f:facet name="footer">
+					<h:outputText
+						value="#{msg['lista.totalRegistros']} #{conjuntoBean.conjuntoList.size()}" />
+				</f:facet>
+
+			</p:dataTable>
+		</ui:fragment>
+	</ui:define>
+
+
+</ui:composition>
+
+</html>

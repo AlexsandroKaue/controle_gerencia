@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>#{msg['consulta.permissao']}</STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton styleClass="btn-block btn-primary"
+				value="#{msg['novo']}" action="#{permissaoBean.showFormNovo}"
+				rendered="#{usuarioWeb.temPermissao('INCLUIR_PERMISSAO')}" />
+		</div>
+	</ui:define>
+	
+	<ui:define name="acessoNaoPermitido">
+		<ui:fragment rendered="#{!usuarioWeb.temPermissao('LISTAR_PERMISSAO')}">
+			<div>
+				<h1 class="login-box-msg">
+					<h:graphicImage library="img" name="aviso.png" alt="User Image"
+						class="img-circle" />
+					<STRONG>#{msg['acesso.nao.permitido']}</STRONG>
+				</h1>
+			</div>
+		</ui:fragment>
+	</ui:define>
+
+	<ui:define name="corpo">
+		
+		<ui:fragment
+			rendered="#{usuarioWeb.temPermissao('LISTAR_PERMISSAO')}">
+			<div class="box box-widget collapsed-box">
+
+				<div class="box-header with-border">
+					<div class="user-block">
+						<ul class="sidebar-menu">
+							<li class="active"><i class="fa fa-search"></i> <label><b>#{msg['filtros']}</b></label></li>
+						</ul>
+					</div>
+
+					<!-- /.user-block -->
+					<div class="box-tools">
+						<button type="button" class="btn btn-box-tool"
+							data-widget="collapse">
+							<i class="fa fa-plus"></i>
+						</button>
+
+					</div>
+
+					<!-- /.box-tools -->
+				</div>
+
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="pull-right">
+
+						<p:commandButton update="@form" value="#{msg['limpar']}"
+							class="btn btn-danger btn-xs" action="#{permissaoBean.listar}">
+							<f:setPropertyActionListener target="#{permissaoBean.pesquisa}"
+								value="" />
+						</p:commandButton>
+
+
+						<p:commandButton class="btn btn-primary btn-xs"
+							update="tbPermissao" value="#{msg['filtrar']}"
+							action="#{permissaoBean.listar}" />
+						<br />
+					</div>
+
+					<div class="row">
+
+						<!-- DIV DA Coluna -->
+						<div class="col-md-6">
+							<!-- DIV DO ELEMTNO -->
+							<div class="form-group">
+								<label><b>#{msg['pesquisa']}</b></label>
+								<p:inputText id="pesquisa" maxlength="100"
+									styleClass="form-control" label="#{msg['descricao']}"
+									value="#{permissaoBean.pesquisa}" />
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<p:dataTable id="tbPermissao" rows="7" var="permissao"
+				paginator="true" value="#{permissaoBean.permissaoList}"
+				paginatorPosition="bottom" paginatorAlwaysVisible="false"
+				emptyMessage="#{msg['lista.vazia']}">
+
+				<p:column headerText="#{msg['permissao.nome']}"
+					styleClass="align-center">
+	                        #{permissao.nome}
+	                    </p:column>
+
+				<p:column width="60%" styleClass="align-center"
+					headerText="#{msg['permissao.descricao']}">
+	                        #{permissao.descricao}
+	                    </p:column>
+
+				<p:column width="15%" styleClass="align-center"
+					headerText="#{msg['acao']}">
+					<p:commandButton icon="ui-icon-pencil" title="#{msg['editar']}"
+						class="btn btn-primary btn-xs"
+						action="#{permissaoBean.showFormEditar(permissao.id)}"
+						rendered="#{usuarioWeb.temPermissao('ALTERAR_PERMISSAO')}" />
+
+					<p:spacer width="10" />
+
+					<p:commandButton icon="ui-icon-trash" title="#{msg['excluir']}"
+						class="btn btn-danger btn-xs"
+						actionListener="#{permissaoBean.remover(permissao)}"
+						rendered="#{usuarioWeb.temPermissao('EXCLUIR_PERMISSAO')}">
+						<p:confirm header="Excluir Permissão"
+							message="Deseja excluir o registro em definitivo?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+
+
+				<f:facet name="footer">
+					<h:outputText
+						value="#{msg['lista.totalRegistros']} #{permissaoBean.permissaoList.size()}" />
+				</f:facet>
+
+			</p:dataTable>
+		</ui:fragment>
+	</ui:define>
+
+</ui:composition>
+
+</html>

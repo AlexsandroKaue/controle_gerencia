@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+
+	<ui:define name="nome_pagina">
+
+		<h1>
+			<STRONG>Criação de Sensor</STRONG>
+		</h1>
+
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton class="btn btn-danger btn-md"
+				value="#{msg['voltar']}" action="#{sensorBean.showFormListar}"
+				immediate="true" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['salvar']}" action="#{sensorBean.salvar}"
+				update="@form" rendered="#{sensorBean.viewState eq 'NOVO'}"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['atualizar']}" action="#{sensorBean.alterar}"
+				update=":messages" rendered="#{sensorBean.viewState eq 'EDITAR'}"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+				
+			<div class="pull-right box-tools">
+			<p:commandButton styleClass="btn-block btn-primary"
+				value="Sincronizar sensores" action="#{sensorBean.obterDuracaoMinima}"
+				><!-- rendered="#{usuarioBizagiWeb.temPermissao('INCLUIR_USUARIO')}" -->
+			</p:commandButton>
+		</div>
+		</div>
+	</ui:define>
+
+
+	<ui:define name="corpo">
+	
+		<style type="text/css">
+		    .ui-panelgrid .ui-grid-responsive .ui-panelgrid-cell {
+		        text-align: center;
+		    }
+		</style>
+
+		<f:metadata>
+			<f:viewAction action="#{sensorBean.initForm(param.sensorId)}" />
+		</f:metadata>
+		
+		<p:dialog header="Informações da Conjunto" widgetVar="conjuntoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+		      <p:outputPanel id="conjuntoDetail" style="text-align:left;">
+			       <p:panelGrid columns="2">
+			                 
+			                <!-- <f:facet name="header">
+                    			<p:graphicImage name="demo/images/car/#{dtSelectionView.selectedCar.brand}-big.gif"/> 
+                			</f:facet> -->
+			                 
+			                <h:outputText value="Id: " />
+			                <h:outputText value="#{sensorBean.selectedConjunto.id}" />
+			 
+			                <!-- <h:outputText value="Código: " />
+			                <h:outputText value="#{sensorBean.selectedConjunto.codigo}" /> -->
+			             
+			                <h:outputText value="Nome: " />
+			                <h:outputText value="#{sensorBean.selectedConjunto.nome}" />
+			                
+			                <!-- <h:outputText value="Duracão Prevista: " />
+			                <h:outputText value="#{sensorBean.selectedConjunto.duracao}" /> -->
+			      </p:panelGrid>
+		       </p:outputPanel>
+		</p:dialog>
+
+
+		<p:tabView>
+			<p:tab title="Informações Cadastrais">
+
+				<div class="row">
+					<div class="col-md-12">
+
+						<div class="box-body">
+
+							<div class="col-md-6">
+							
+								<div class="form-group">
+									<label for="sensorNome"><b>Nome</b></label>
+									<p:inputText maxlength="255" styleClass="form-control"
+										label="Nome" value="#{sensorBean.sensor.nome}" required="true"
+										id="sensorNome" placeholder="Nome" />
+								</div>
+								
+								<div class="form-group">
+									<label for="sensorNomeExibicao"><b>Nome de Exibição</b></label>
+									<p:inputText maxlength="255" styleClass="form-control"
+										label="Nome de Exibição" value="#{sensorBean.sensor.nomeDeExibicao}" required="true"
+										id="sensorNomeExibicao" placeholder="Nome de Exibição" />
+								</div>
+								
+								<div class="form-group">
+									<label for="sensorDescricao"><b>Descrição</b></label>
+									<p:inputText maxlength="50" styleClass="form-control"
+										label="#{msg['usuario.email']}"	value="#{sensorBean.sensor.descricao}" required="true"
+										id="sensorDescricao" placeholder="Descricao" />
+								</div>
+
+								<div class="row">
+									<div class="col-xs-12">
+										<label><b>SLA</b></label><BR />
+									</div>
+									<div class="col-xs-4">
+										<label for="dias"><b>Dias</b></label><BR />
+										<p:spinner id="dias" value="#{sensorBean.sla.dias}"/>
+									</div>
+									<div class="col-xs-4">
+										<label for="horas"><b>Horas</b></label><BR />
+										<p:spinner id="horas" value="#{sensorBean.sla.horas}" />
+									</div>
+									<div class="col-xs-4">
+										<label for="minutos"><b>Minutos</b></label><BR />
+										<p:spinner id="minutos" value="#{sensorBean.sla.minutos}" />
+									</div>
+								</div>
+							</div>
+						 
+						</div>
+						<!-- /.box-body -->
+
+					</div>
+				</div>
+
+
+
+
+			</p:tab>
+			
+			<p:tab title="Conjuntos">
+			
+				<!-- <script type="text/javascript">
+				    function handleDrop(event, ui) {
+				        var droppedCar = ui.draggable;
+				 
+				        droppedCar.fadeOut('fast');
+				    }
+				</script> -->
+				
+				<div class="box-body">
+				
+					<div class="col-md-6">
+						<p:fieldset id="tarefasDisponiveis" legend="Conjuntos Disponíveis">
+							<p:dataTable id="tbTarefasDisponiveis" var="conjunto" value="#{sensorBean.conjuntoListSource}" rows="5" 
+							paginator="true" paginatorPosition="bottom" emptyMessage="Nenhum registro encontrado" 
+							selection="#{sensorBean.selectedConjuntoListSource}" rowKey="#{conjunto.id}">
+								
+								<p:column selectionMode="multiple" style="width:36px;text-align:center"/>
+							 
+						            <p:column headerText="Número" width="10%">
+						                <h:outputText value="#{conjunto.id}" />
+						            </p:column>
+						 
+						            <!-- <p:column headerText="Código">
+						                <h:outputText value="#{conjunto.codigo}" width="10%"/>
+						            </p:column> -->
+						 
+						            <p:column headerText="Nome">
+						                <h:outputText value="#{conjunto.nome}" />
+						            </p:column>
+							            
+							        <p:column headerText="Info" style="text-align: center">
+							             <p:commandButton oncomplete="PF('conjuntoDialog').show()" icon="ui-icon-search" title="View" update="conjuntoDetail">
+							                <f:setPropertyActionListener value="#{conjunto}" target="#{sensorBean.selectedConjunto}" />
+							            </p:commandButton>
+							        </p:column>
+							</p:dataTable>
+								
+					  </p:fieldset>
+					</div>
+				  
+				  <div class="col-md-1">
+				  	<DIV style="margin-top: 200px; font-size:small;">
+ 				        <p:commandButton action="#{sensorBean.addTarefaSelecionada()}" update="tbTarefasDisponiveis tarefasSelecionadas" value="Adicionar >>" style="width:100%;font-size:small;"/><BR /><BR />
+					  	<p:commandButton action="#{sensorBean.removeTarefaSelecionada()}" update="tbTarefasDisponiveis tarefasSelecionadas" value="&lt;&lt; Excluir" style="width:100%;font-size:small;"/>
+				  	</DIV>
+				  </div>
+						 
+				  <div class="col-md-5">
+				    <p:fieldset id="tarefasSelecionadas" legend="Conjuntos Selecionadas">
+			            <p:dataTable id="tbTarefasSelecionadas" var="conjunto" value="#{sensorBean.conjuntoListTarget}"
+			            rows="5" paginator="true" paginatorPosition="bottom" emptyMessage="Nenhum registro encontrado"
+			            selection="#{sensorBean.selectedConjuntoListTarget}" rowKey="#{conjunto.id}"><!--  rendered="#{not empty sensorBean.selectedConjuntoList}" -->
+			            
+			            	<p:column selectionMode="multiple" style="width:36px;text-align:center"/>
+			            	
+			                <p:column headerText="Número">
+			                    <h:outputText value="#{conjunto.id}" />
+			                </p:column>
+			                
+						    <!-- 
+			                <p:column headerText="Código">
+			                    <h:outputText value="#{conjunto.codigo}" />
+			                </p:column> -->
+			 
+			                <p:column headerText="Nome" width="40%">
+			                    <h:outputText value="#{conjunto.nome}" />
+			                </p:column>
+			                
+			                <p:column headerText="Info" style="text-align: center">
+					             <p:commandButton oncomplete="PF('conjuntoDialog').show()" icon="ui-icon-search" title="View" update="conjuntoDetail">
+					                <f:setPropertyActionListener value="#{conjunto}" target="#{sensorBean.selectedConjunto}"/>
+					            </p:commandButton>
+					        </p:column>
+     								
+			            </p:dataTable>
+				    </p:fieldset>
+				  </div>
+				
+				</div>
+			
+			</p:tab>
+			
+			
+			
+		</p:tabView>
+		
+	</ui:define>
+
+</ui:composition>
+
+</html>

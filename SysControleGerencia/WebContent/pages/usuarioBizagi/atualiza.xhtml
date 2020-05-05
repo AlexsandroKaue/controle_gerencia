@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+
+	<ui:define name="nome_pagina">
+
+		<h1>
+			<STRONG> Cadastro de Usuário </STRONG>
+		</h1>
+
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+		
+			<p:commandButton class="btn btn-danger btn-md"
+				value="#{msg['voltar']}" action="#{usuarioWeb.paginaPrincipal}"
+				immediate="true" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['salvar']}" action="#{usuarioBean.salvar}"
+				update="@form" rendered="#{usuarioBean.viewState eq 'NOVO'}"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['atualizar']}" action="#{usuarioBean.alterar}"
+				update=":messages" 
+				rendered="#{usuarioBean.viewState eq 'EDITAR' or usuarioBean.viewState eq 'ATUALIZAR'}"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')"/>
+
+			<p:commandButton value="Senha" class="btn btn-warning btn-md"
+				data-toggle="modal" data-target="#modal-default"
+				oncomplete="PF('dlg1').show();"/>
+		</div>
+	</ui:define>
+
+
+	<ui:define name="corpo">
+
+		<f:metadata>
+			<f:viewAction action="#{usuarioBean.initForm(param.usuarioId)}" />
+		</f:metadata>
+
+		<p:dialog id="alterarSenhaDialog" header="Alterar senha" widgetVar="dlg1" modal="true"
+			resizable="false" width="300px">
+			<p:messages id="alterarSenhaMessage" closable="true" />
+			<!-- <h:form id="alterarSenhaModel"> -->
+				<div class="box-body">
+					<div class="form-group">
+						<label>Senha atual</label>
+						<p:password id="senhaAtual" maxlength="20"
+							styleClass="form-control" value="#{usuarioBean.senhaAtual}" 
+							/> <!-- binding="#{input1}" -->
+
+					</div>
+
+					<div class="form-group">
+						<label>Nova senha</label>
+						<p:password id="novaSenha" maxlength="20"
+							styleClass="form-control" value="#{usuarioBean.senhaNova}"
+							match="novaSenhaConf"
+							validatorMessage="Senha de confirmação diferente da nova senha"
+							/><!-- binding="#{input2}" -->
+
+					</div>
+
+					<div class="form-group">
+						<label>Confirmar senha</label>
+						<p:password id="novaSenhaConf" maxlength="20"
+							styleClass="form-control" value="#{usuarioBean.senhaNova}" 
+							/><!-- binding="#{input3}" -->
+
+					</div>
+				</div>
+				
+				<div class="box-footer">
+					<div class="pull-right box-tools">
+
+						<p:commandButton id="alterarSenhaAction" class="btn btn-primary btn-md" value="Confirmar"
+							action="#{usuarioBean.atualizarSenha}"
+							update="alterarSenhaDialog" process="alterarSenhaDialog"
+							oncomplete="PF('dlg1').show();">
+						</p:commandButton>
+							
+						<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+							immediate="true" update="alterarSenhaDialog" oncomplete="PF('dlg1').hide();" />
+					</div>
+				</div>
+			<!-- </h:form> -->
+		</p:dialog>
+
+		<div class="box-body">
+			<div class="row">
+				<!-- DIV DA Coluna -->
+
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Foto</label>
+						<p:panel id="foto" style="margin-bottom:20px">
+							<ui:fragment rendered="#{not empty usuarioBean.image}">
+								<img
+									src="data:image/png;base64,#{usuarioBean.imageContentsAsBase64}"
+									width="100%" />
+							</ui:fragment>
+							<p:fileUpload
+								fileUploadListener="#{usuarioBean.handleFileUpload}"
+								mode="advanced" update="foto" auto="true"
+								allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+						</p:panel>
+
+					</div>
+				</div>
+
+				<div class="col-md-8">
+
+					<!-- DIV DO ELEMTNO -->
+					<div class="form-group">
+						<label>#{msg['usuario.nome']}</label>
+						<p:inputText maxlength="45" styleClass="form-control"
+							label="#{msg['usuario.nome']}"
+							value="#{usuarioBean.usuario.nome}" required="true" id="nome" />
+
+
+					</div>
+
+				</div>
+				<!-- DIV DA LINHA -->
+
+				<div class="col-md-8">
+					<div class="form-group">
+						<label>#{msg['usuario.login']}</label>
+						<p:inputText maxlength="15" styleClass="form-control"
+							label="#{msg['usuario.login']}"
+							value="#{usuarioBean.usuario.login}" required="true" id="login" disabled="true"/>
+					</div>
+				</div>
+
+				<div class="col-md-8">
+
+					<label>#{msg['usuario.email']}</label>
+					<p:inputText maxlength="50" styleClass="form-control"
+						label="#{msg['usuario.email']}"
+						value="#{usuarioBean.usuario.email}" required="true" id="email" />
+
+
+
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

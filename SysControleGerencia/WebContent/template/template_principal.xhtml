@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<title>Sistema Template</title>
+	
+	<link rel="shortcut icon" href="#{resource['images/favicon.ico']}" />
+	
+	<h:outputStylesheet library="css" name="global.css" />
+	<h:outputStylesheet library="primefaces-bootstrap" name="custom.css" />
+	<h:outputStylesheet library="primefaces-bootstrap" name="theme.css" />
+</h:head>
+<h:body>
+	
+	<div id="cabecalho">
+		<ui:insert name="cabecalho">
+
+			<p:outputPanel styleClass="topo">
+				<div style="float: left;">
+					<p:graphicImage library="images" name="logo.jpg" styleClass="logo_cogerh" />
+				</div>
+				<div style="float: right;">
+					<p:outputLabel value="SysDiarias - Sistema de Diarias" styleClass="titulo" style="text-align: right !important;" />
+				</div>
+				<div id="user-info">
+					<ui:fragment rendered="#{usuarioWeb.usuario.login != null}">
+						<h:form>
+							Seja bem-vindo, #{usuarioWeb.usuario.nome}
+						</h:form>
+					</ui:fragment>
+				</div>
+			</p:outputPanel>
+
+		</ui:insert>
+	</div>
+	
+	<div id="menu">
+		<ui:insert name="menu">
+			<ui:include src="menu.xhtml" />
+		</ui:insert>
+	</div>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <p:messages id="messages" closable="true" />
+        </div>
+    </div>
+
+	<div id="conteudo">
+		<div id="container">
+			<ui:insert name="corpo" />
+			<br /><br />
+		</div>
+	</div>
+	
+	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    </p:confirmDialog>
+
+	<!-- <div id="rodape">
+		<div class="rodape-bar">
+			<strong>..::: © 2016 | Cogerh - Companhia de Gestão dos Recursos Hídricos :::..</strong>
+		</div>
+	</div> -->
+	
+</h:body>
+</html>

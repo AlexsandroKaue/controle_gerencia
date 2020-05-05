@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG> Consulta Detalhada de Diária </STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<p:commandButton class="btn btn-danger btn-md"
+			value="#{msg['voltar']}" action="#{sensorBean.showFormListar}"
+			immediate="true" />
+
+
+		<p:commandButton value="Anexar documento" class="btn-success btn-md"
+			onclick="PF('dlg1').show();" immediate="true" />
+
+		<script type="text/javascript">
+			function start() {
+				PF('statusDialog').show();
+			}
+
+			function stop() {
+				PF('statusDialog').hide();
+			}
+			
+		</script>
+
+	</ui:define>
+
+	<ui:define name="corpo">
+
+		<style>
+			/* Always set the map height explicitly to define the size of the div
+						* element that contains the map. */
+			/* Optional: Makes the sample page fill the window. */
+			#map {
+				height: 100%;
+				width: 100%;
+			}
+			
+			.mapContainer {
+				height: 200px;
+				width: 100%
+			}
+		    .ui-chart {
+		        margin-bottom: 50px;
+		    }
+		</style>
+		
+		<script type="text/javascript">
+		 $(document).ready(function() {
+			    
+			    var dadosDoGrafico = document.getElementById("dadosDoGrafico").value;
+			    
+			    var parsedData = JSON.parse(dadosDoGrafico);
+			    
+			    var s2 = [[0, parsedData.zeroDias], [1, parsedData.umDia], [2, parsedData.doisDias], 
+			              [3, parsedData.tresDias], [4, parsedData.quatroDias], [5, parsedData.cincoDias], 
+			              [6, parsedData.seisDias], [7, parsedData.seteDias], [8, parsedData.oitoDias], 
+			              [9, parsedData.noveDias], [10, parsedData.dezDias], [11, parsedData.onzeDias], 
+			              [12, parsedData.dozeDias], [13, parsedData.trezeDias], [14, parsedData.quatorzeDias]];
+			     
+			    var grid = {
+			        gridLineWidth: 1.5,
+			        gridLineColor: 'rgb(235,235,235)',
+			        drawGridlines: true
+			    };
+			     
+			    plot2 = $.jqplot('donut', [s2], {
+			        grid: grid,
+			        seriesDefaults: {
+			            fill: true,
+			        },
+			        canvasOverlay: {
+			            show: true,
+			            objects: [
+			                {dashedVerticalLine: {
+			                    name: 'bam-bam',
+			                    x: 12,
+			                    lineWidth: 5,
+			                    dashPattern: [16, 12],
+			                    lineCap: 'round',
+			                    yOffset: '20px',
+			                    color: 'rgb(255, 36, 0)',
+			                    shadow: false
+			                }}
+			            ]
+			        }
+			    });
+			     
+			});
+		 
+		 
+		</script>
+
+		<p:dialog header="Anexo de Documento" widgetVar="dlg1" modal="true">
+			<div class="box-body">
+
+
+				<div class="form-group">
+					<div class="pull-right box-tools">
+						<p:commandButton class="btn btn-primary btn-md" value="Salvar"
+							action="#{sensorBean.salvarDocumento}" ajax="false" />
+						<!-- disabled="#{sensorBean.sensorSelecionada.enderecoImagem != NULL}" -->
+
+						<p:commandButton class="btn btn-success btn-md" value="Download"
+							ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"
+							actionListener="#{sensorBean.downloadDocumento}">
+							<p:fileDownload value="#{sensorBean.file}" />
+						</p:commandButton>
+
+					</div>
+				</div>
+
+
+
+
+				<BR />
+				<div class="form-group">
+
+					<p:fileUpload value="#{sensorBean.uploadedFile}" mode="simple" />
+					<!-- disabled="#{sensorBean.sensorSelecionada.enderecoImagem != NULL}" -->
+
+
+				</div>
+
+
+
+
+			</div>
+			<!-- /.box-body -->
+
+			<div class="box-footer">
+				<div class="pull-right box-tools">
+
+					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+						immediate="true" onclick="PF('dlg1').hide();" />
+				</div>
+			</div>
+
+
+		</p:dialog>
+
+		<f:metadata>
+			<f:viewAction action="#{sensorBean.initConsultaDetalhada(param.sensorId)}" />
+		</f:metadata>
+
+		<!-- <section class="invoice"> -->
+
+
+
+			<!-- <div class="row">
+				<div class="col-xs-12">
+					<h2 class="page-header">
+						<i class="fa fa-plane"></i> <strong>Diária Nº - <span
+							class="description-percentage text-blue"></span>
+						</strong><small class="pull-right"> <h:outputText
+								value="#{sensorBean.sensorSelecionada.dataInclusao}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText><br /></small>
+					</h2>
+				</div>
+			</div> -->
+			<!-- <div class="row invoice-info"> -->
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">Resumo do tempo de ciclo</h3>
+
+								<div class="box-tools">
+									<div class="input-group input-group-sm" style="width: 150px;">
+										<input type="text" name="table_search"
+											class="form-control pull-right" placeholder="Search" />
+
+										<div class="input-group-btn">
+											<button type="submit" class="btn btn-default">
+												<i class="fa fa-search"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body table-responsive no-padding">
+								<table class="table table-hover">
+								
+									
+									
+										<tr>
+											<th>Cronômetro</th>
+											<th>Contagens</th>
+											<th>Sla</th>
+											<th>Duração mínima</th>
+											<th>Duração máxima</th>
+											<th>Duração média</th>
+											<th>Desvio padrão</th>
+										</tr>
+										
+											<tr>
+												<td>#{sensorBean.sensor.nome}</td>
+												<td>#{sensorBean.contagem}</td>
+												<td>#{sensorBean.sensor.nome}</td>
+												<td>#{sensorBean.duracaoMinima}</td>
+												<td>#{sensorBean.duracaoMaxima}</td>
+												<td>#{sensorBean.duracaoMedia}</td>
+												<td>0.0</td>
+											</tr>
+									
+								</table>
+							</div>
+							
+							
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+					</div>
+					
+					 <div class="col-xs-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">Nível de Serviço</h3>
+
+								<div class="box-tools">
+									<div class="input-group input-group-sm" style="width: 150px;">
+										<input type="text" name="table_search"
+											class="form-control pull-right" placeholder="Search" />
+
+										<div class="input-group-btn">
+											<button type="submit" class="btn btn-default">
+												<i class="fa fa-search"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="box-body table-responsive no-padding">
+								<table class="table table-hover">
+								
+									
+									
+										<tr>
+											<th>Cronômetro</th>
+											<th>&lt;1</th>
+											<th>1</th>
+											<th>2</th>
+											<th>3</th>
+											<th>4</th>
+											<th>5</th>
+											<th>6</th>
+											<th>>6</th>
+										</tr>
+										<tr>
+											<td>#{sensorBean.sensor.nome}</td>
+											<td>#{sensorBean.perMenosQueUmDia}</td>
+											<td>#{sensorBean.perUmDia}</td>
+											<td>#{sensorBean.perDoisDias}</td>
+											<td>#{sensorBean.perTresDias}</td>
+											<td>#{sensorBean.perQuatroDias}</td>
+											<td>#{sensorBean.perCincoDias}</td>
+											<td>#{sensorBean.perSeisDias}</td>
+											<td>#{sensorBean.perMaisQueSeisDias}</td>
+										</tr>
+									
+								</table>
+							</div>
+							
+							
+						</div>
+					</div>
+					
+					 <div class="col-xs-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">Histograma de Duração</h3>
+
+								<div class="box-tools">
+									<div class="input-group input-group-sm" style="width: 150px;">
+										<input type="text" name="table_search"
+											class="form-control pull-right" placeholder="Search" />
+
+										<div class="input-group-btn">
+											<button type="submit" class="btn btn-default">
+												<i class="fa fa-search"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="box-body table-responsive no-padding">
+								<DIV id="donut">
+									<h:inputHidden id="dadosDoGrafico" value="#{sensorBean.dadosDoGrafico}" />
+								</DIV> 
+							</div>
+							
+							
+						</div>
+						
+						
+					</div>
+					
+					
+				</div>
+			<!-- </div> -->
+
+
+
+
+			<br />
+			
+	</ui:define>
+
+</ui:composition>
+
+</html>

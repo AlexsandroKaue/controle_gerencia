@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Consulta de Computadores</STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['novo']}" action="#{grupoBean.showFormNovo}"
+				immediate="true"
+				rendered="#{usuarioWeb.temPermissao('INCLUIR_GRUPO')}" />
+				
+			<p:commandButton class="btn btn-primary btn-md"
+				value="Broadcast" action="#{computadorBean.broadcast}"
+				immediate="true"
+				rendered="#{usuarioWeb.temPermissao('INCLUIR_GRUPO')}" />
+		</div>
+	</ui:define>
+	
+	<ui:define name="acessoNaoPermitido">
+		<ui:fragment rendered="#{!usuarioWeb.temPermissao('LISTAR_GRUPO')}">
+			<div>
+				<h1 class="login-box-msg">
+					<h:graphicImage library="img" name="aviso.png" alt="User Image"
+						class="img-circle" />
+					<STRONG>#{msg['acesso.nao.permitido']}</STRONG>
+				</h1>
+			</div>
+		</ui:fragment>
+	</ui:define>
+
+	<ui:define name="corpo">
+	
+	<style type="text/css">
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+
+            #boxTable.ui-datatable .ui-datatable-header {
+                text-align: center !important;
+            }
+
+            .year-spinner input {
+                width: 100px
+            }
+
+            .ui-button-text-only .ui-button-text {
+                padding: 0.3em 0.4em;
+            }
+
+            .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox {
+                display: none;
+            }
+        </style>
+
+		<ui:fragment rendered="#{usuarioWeb.temPermissao('LISTAR_GRUPO')}">
+			
+			
+			<p:dataTable id="tbComputador" rows="10" var="computador" paginator="true"
+				value="#{computadorBean.computadorList}" paginatorPosition="bottom"
+				paginatorAlwaysVisible="false" emptyMessage="#{msg['lista.vazia']}" widgetVar="computadores" filteredValue="#{computadorBean.filteredComputadores}">
+
+				<f:facet name="header">
+		            <p:outputPanel>
+		                <h:outputText value="Pesquisa em todos os campo: " />
+		                <p:inputText id="globalFilter" onkeyup="PF('computadores').filter()" style="width:150px" placeholder="Enter keyword"/>
+		            </p:outputPanel>
+        		</f:facet>
+
+				<p:column headerText="id" styleClass="align-center" sortBy="#{computador.ID}" filterBy="#{computador.ID}" filterMatchMode="contains">
+			              #{computador.ID}
+			          </p:column>
+			          
+			    <p:column headerText="Device" styleClass="align-center" sortBy="#{computador.device}" filterBy="#{computador.device}" filterMatchMode="contains">
+			              #{computador.device}
+			          </p:column>
+
+				<p:column headerText="Nome" styleClass="align-center" sortBy="#{computador.nome}" filterBy="#{computador.nome}" filterMatchMode="contains">
+			              #{computador.nome}
+			          </p:column>
+			          
+			    <p:column headerText="Grupo" styleClass="align-center" sortBy="#{computador.grupo}" filterBy="#{computador.grupo}" filterMatchMode="contains">
+			              #{computador.grupo}
+			          </p:column>
+			          
+			    <p:column headerText="Sistema Operacional" styleClass="align-center" sortBy="#{computador.sistemaOperacional}" filterBy="#{computador.sistemaOperacional}" filterMatchMode="contains">
+			              #{computador.sistemaOperacional}
+			          </p:column>
+			          
+			    <p:column headerText="Versão SO" styleClass="align-center" sortBy="#{computador.versaoSistemaOperacional}" filterBy="#{computador.versaoSistemaOperacional}" filterMatchMode="contains">
+			              #{computador.versaoSistemaOperacional}
+			          </p:column>
+			    <p:column headerText="Processador" styleClass="align-center" sortBy="#{computador.processador}" filterBy="#{computador.processador}" filterMatchMode="contains">
+			              #{computador.processador}
+			          </p:column>
+			    
+			    <p:column headerText="Memória" styleClass="align-center" sortBy="#{computador.memoria}" filterBy="#{computador.memoria}" filterMatchMode="contains">
+			              #{computador.memoria}
+			          </p:column>
+			          
+			    <p:column headerText="Arquitetura" styleClass="align-center" sortBy="#{computador.arquitetura}" filterBy="#{computador.arquitetura}" filterMatchMode="contains">
+			              #{computador.arquitetura}
+			          </p:column>
+
+				<!-- <p:column width="15%" headerText="#{msg['acao']}"
+					styleClass="align-center">
+					<p:commandButton icon="ui-icon-pencil" title="#{msg['editar']}"
+						class="btn btn-primary btn-xs"
+						action="#{grupoBean.showFormEditar(grupo.id)}" immediate="true"
+						rendered="#{usuarioWeb.temPermissao('ALTERAR_GRUPO')}" />
+
+					<p:spacer width="10" />
+
+					<p:commandButton icon="ui-icon-trash" title="#{msg['excluir']}"
+						class="btn btn-danger btn-xs"
+						actionListener="#{grupoBean.remover(grupo)}"
+						update="tbComputador :messages" immediate="true"
+						oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')"
+						rendered="#{usuarioWeb.temPermissao('EXCLUIR_GRUPO')}">
+
+						<p:confirm header="Excluir Bacia"
+							message="Deseja excluir o registro em definitivo?"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+
+				</p:column> -->
+
+
+				<f:facet name="footer">
+					<h:outputText
+						value="#{msg['lista.totalRegistros']} #{computadorBean.computadorList.size()}" />
+				</f:facet>
+
+			</p:dataTable>
+			
+		</ui:fragment>
+	</ui:define>
+
+</ui:composition>
+
+</html>

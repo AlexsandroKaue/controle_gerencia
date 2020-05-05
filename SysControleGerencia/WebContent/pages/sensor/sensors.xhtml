@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+
+	<ui:define name="nome_pagina">
+
+		<h1>
+			<STRONG> Sensores </STRONG>
+		</h1>
+
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton class="btn btn-success btn-md"
+				value="Novo Cronômetro" action="#{usuarioBean.showFormListar}"
+				immediate="true" />
+				
+			<p:commandButton class="btn btn-warning btn-md"
+				value="Novo Contador" action="#{usuarioBean.showFormListar}"
+				immediate="true" />
+		</div>
+	</ui:define>
+
+ 
+	<ui:define name="corpo">
+
+		<div class="box box-widget">
+				<div class="box-header with-border"> 
+					<div class="user-block">
+						<ul class="sidebar-menu">
+							<li class="active"><i class="fa fa-search"></i> <label><b>#{msg['filtros']}</b></label></li>
+						</ul>
+					</div>
+
+					<!-- /.user-block -->
+					<div class="box-tools">
+						<button type="button" class="btn btn-box-tool"
+							data-widget="collapse">
+							<i class="fa fa-plus"></i>
+						</button>
+
+					</div>
+
+					<!-- /.box-tools -->
+				</div>
+
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="pull-right">
+
+						<p:commandButton update="@form" value="#{msg['limpar']}"
+							class="btn btn-danger btn-xs" action="#{grupoBean.listar}">
+							<f:setPropertyActionListener target="#{grupoBean.pesquisa}"
+								value="" />
+						</p:commandButton>
+
+
+						<p:commandButton class="btn btn-primary btn-xs"
+							value="#{msg['filtrar']}" action="#{grupoBean.listar}" />
+						<br />
+					</div>
+
+					<div class="row">
+
+						<!-- Calendario: DE -->
+						<div class="col-md-2">
+							<!-- DIV DO ELEMTNO -->
+							<div class="form-group">
+								<label><b>De: </b></label><BR />
+        						<p:calendar id="popup1" value="#{calendarView.date1}" />
+							</div>
+						</div>
+						
+						<!-- Calendario: PARA -->
+						<div class="col-md-2">
+							<!-- DIV DO ELEMTNO -->
+							<div class="form-group">
+								<label><b>Para: </b></label><BR />
+        						<p:calendar id="popup2" value="#{calendarView.date2}" />
+							</div>
+						</div>
+						
+						<!-- Range Slider-->
+						<div class="col-md-3">
+							<!-- DIV DO ELEMTNO -->
+							<div class="form-group">
+								<label><b>Range Slider: </b></label><BR />
+							    <h:outputText id="displayRange"><label><b>Between #{sliderView.number8} and #{sliderView.number9} </b></label><BR /></h:outputText>
+							    <p:slider for="txt6,txt7" display="displayRange" style="width: 300px" range="true" displayTemplate="Between {min} and {max}" />
+							    <h:inputHidden id="txt6" value="0" />
+							    <h:inputHidden id="txt7" value="100" />
+							</div>
+						</div>
+						
+						<div class="col-md-3">
+							<!-- DIV DO ELEMTNO -->
+							<div class="form-group">
+							    <label><b>Range Slider: </b></label><BR />
+						        <p:selectOneButton value="#{selectManyView.selectedOptions}">
+						            <f:selectItem itemLabel="1a" itemValue="1a" />
+						            <f:selectItem itemLabel="6m" itemValue="6m" />
+						            <f:selectItem itemLabel="3m" itemValue="3m" />
+						            <f:selectItem itemLabel="1m" itemValue="1m" />
+						            <f:selectItem itemLabel="5d" itemValue="5d" />
+						            <f:selectItem itemLabel="1d" itemValue="1d" />
+						        </p:selectOneButton>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		<div class="box-body">
+			<div class="row">
+				<!-- <div class="col-md-3">
+					<div class="form-group">
+						<p:outputLabel for="advanced" value="Tarefas: " /> 
+		        			<p:selectManyMenu id="advanced" value="#{taskBean.tarefaSelecionada}" converter="genericCvt"
+		                          var="t" filter="true" filterMatchMode="contains" showCheckbox="true" style="width:100%" scrollHeight="500">
+		                          
+					            <f:selectItems value="#{taskBean.tarefas}" var="tarefa" itemLabel="#{tarefa.nome}" itemValue="#{tarefa}" />
+					 
+					            <p:column>
+					                <h:outputText styleClass="ui-theme ui-theme-#{t.nome}" />
+					            </p:column>
+					 
+					            <p:column>
+					                <h:outputText value="#{t.nome}" />
+				            	</p:column>
+		        		</p:selectManyMenu>
+	        		</div>
+        		</div> -->
+        		
+        		
+        		
+	        		<div class="col-md-4">
+		        		
+		        		<section class="invoice">
+		        		
+		        		<ui:fragment rendered="false">
+		        		
+		        			
+		        			<p:commandLink id="ajax1" actionListener="#{buttonView.buttonAction}" value="Edição dos Sensores"/>
+		    				
+						    <p:accordionPanel>
+						        <p:tab title="Solicitação de Outorga">
+						            <h:panelGrid columns="2" cellpadding="10">
+						                <h:outputText
+						                    value="The story begins as Don Vito Corleone..." />
+						            </h:panelGrid>
+						        </p:tab>
+						    </p:accordionPanel>
+						    
+		        		</ui:fragment>
+		        		
+		        		
+		        		<ui:fragment rendered="true">
+		        			
+		        			<div class="row">
+		        				<div class="col-md-12">
+		        					<p:commandLink id="ajax2" actionListener="#{buttonView.buttonAction}" value="Voltar ao Relatórios"/>
+		        				</div>
+		        			</div>
+		        				
+		        			<div class="row">
+				        		<div class="col-md-3">
+				    				
+									<div class="form-group">
+										<label><b>Processo</b></label><BR />
+										<p:selectOneMenu class="form-control" value="#{baciaBean.bacia.ativa}"
+											label="#{msg['bacia.status']}">
+											<f:selectItem itemLabel="Solicitação de Outorga" itemValue="Solicitação de Outorga" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</div>
+							
+							<p:spacer height="15"></p:spacer>
+							
+						    <p:accordionPanel>
+						        <p:tab title="Solicitação de Outorga">
+						            <h:panelGrid columns="2" cellpadding="10">
+						                <h:outputText
+						                    value="The story begins as Don Vito Corleone..." />
+						            </h:panelGrid>
+						        </p:tab>
+						    </p:accordionPanel>
+		        		
+		        		</ui:fragment>
+		        		
+		        		</section>
+	        		</div>
+	        	
+	        	
+        		
+        		<div class="col-md-8">
+	        		<p:tabView>
+				        <p:tab title="Conômetros">
+				            <h:panelGrid columns="2" cellpadding="10">
+				                <h:outputText
+				                    value="" />
+				            </h:panelGrid>
+				        </p:tab>
+				        <p:tab title="Contadores">
+				            <h:panelGrid columns="2" cellpadding="10">
+				                <h:outputText value="" />
+				            </h:panelGrid>
+				        </p:tab>
+			   		</p:tabView>
+        		</div>
+
+			</div>
+
+		</div>
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

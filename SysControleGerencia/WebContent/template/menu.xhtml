@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition>
+
+		<h:form id="menuForm" prependId="false">
+
+			<p:menubar>
+
+				<p:submenu label="Administração" styleClass="menu-icon-down" rendered="#{usuarioWeb.temPermissao('MENU_ADMINISTRADOR')}">
+					<p:menuitem value="Usuários" outcome="/pages/usuario/lista" rendered="#{usuarioWeb.temPermissao('MENU_USUARIOS')}" />
+					<p:menuitem value="Grupos" outcome="/pages/grupo/lista" rendered="#{usuarioWeb.temPermissao('MENU_GRUPOS')}" />
+					<p:menuitem value="Permissões" outcome="/pages/permissao/lista" rendered="#{usuarioWeb.temPermissao('MENU_PERMISSOES')}" />
+				</p:submenu>
+
+				<p:submenu label="Cadastros" styleClass="menu-icon-down">
+				<p:menuitem value="Aprovadores" action="#"></p:menuitem>
+				<p:menuitem value="Grau De Instrução" action="#"></p:menuitem>
+				<p:menuitem value="Funções" action="#"></p:menuitem>
+				<p:menuitem value="Categorias Diárias" action="#"></p:menuitem>
+				<p:menuitem value="Macro-Projetos" action="#"></p:menuitem>
+				<p:menuitem value="Destinos(UF)" action="#"></p:menuitem>
+				<p:menuitem value="Localidades" action="#"></p:menuitem>
+				<p:menuitem value="Feriados" action="#"></p:menuitem>
+				<p:menuitem value="Gerência" outcome="/pages/gerencia/lista"></p:menuitem>
+				
+				
+				</p:submenu>
+				
+
+				<p:submenu label="Teste 03" styleClass="menu-icon-down">
+					<p:menuitem value="Teste 04" action="#"></p:menuitem>
+					<p:menuitem value="Teste 05" action="#"></p:menuitem>
+					<p:menuitem value="Teste 06" action="#"></p:menuitem>
+				</p:submenu>
+
+				<p:menuitem value="Sair" action="#{loginBean.deslogar}"></p:menuitem>
+
+			</p:menubar>
+
+		</h:form>
+
+	</ui:composition>		
+
+</html>

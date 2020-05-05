@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Cadastro de Projeto </STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+
+			<p:commandButton class="btn btn-danger btn-md"
+				value="#{msg['voltar']}" action="#{grupoBean.showFormListar}"
+				immediate="true" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['salvar']}" action="#{grupoBean.salvar}" update="@form"
+				rendered="#{grupoBean.viewState eq 'NOVO'}"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['atualizar']}" action="#{grupoBean.alterar}"
+				update=":messages" rendered="#{grupoBean.viewState eq 'EDITAR'}"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+		</div>
+	</ui:define>
+
+	<p:dialog header="Filtro de Localidade - Município Origem"
+		widgetVar="dlg2" modal="true">
+		<div class="box-body">
+			<div class="form-group">
+
+				<div class="pull-right box-tools">
+
+					<p:commandButton class="btn btn-primary btn-md" value="Buscar"
+						action="#{diariaBean.listarLocalidades}" update="tbOrigem" />
+				</div>
+			</div>
+
+
+
+			<div class="form-group">
+				<label for="exampleInputEmail1">Nome</label>
+				<p:inputText maxlength="45" styleClass="form-control"
+					label="#{msg['grupo.nome']}" value="#{diariaBean.filtroLocalidade}"
+					id="nomeBuscaLocalidade" />
+
+			</div>
+			<div class="form-group"></div>
+
+
+
+
+
+
+
+
+
+		</div>
+		<!-- /.box-body -->
+
+		<div class="box-footer">
+			<div class="pull-right box-tools">
+
+				<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+					immediate="true" onclick="PF('dlg1').hide();" />
+			</div>
+		</div>
+
+
+	</p:dialog>
+
+
+
+	<ui:define name="corpo">
+		<f:metadata>
+		</f:metadata>
+
+		<!-- DIV PRINCIPAL -->
+		<div class="box-body">
+			<div class="row">
+
+				<!-- DIV DA Coluna -->
+
+
+
+
+				<div class="col-md-6">
+					<!-- -->
+					<div class="form-group">
+						<label>#{msg['nome']}</label>
+						<p:inputText maxlength="100" styleClass="form-control"
+							label="#{msg['nome']}" value="#{grupoBean.grupo.nome}" />
+					</div>
+					<div class="form-group">
+
+						<label>Responsável</label>
+
+
+
+						<div class="input-group input-group-sm">
+
+							<p:inputText maxlength="45" styleClass="form-control"
+								label="#{msg['grupo.nome']}"
+								value="#{diariaBean.solicitanteSelecionado.usuario.nome}"
+								id="nomeUsuario" readonly="true" />
+							<span class="input-group-btn"> <p:commandButton
+									icon="ui-icon-search" title="#{msg['editar']}"
+									class="btn-success btn-xs" data-toggle="modal"
+									data-target="#modal-default" onclick="PF('dlg1').show();" />
+							</span>
+						</div>
+
+
+
+
+					</div>
+
+					<!-- DIV DO ELEMTNO -->
+					<div class="form-group">
+						<label>#{msg['descricao']}</label>
+						<p:inputTextarea maxlength="60" styleClass="form-control"
+							label="#{msg['grupo.nome']}"
+							value="#{diariaBean.diaria.justificativaSolicitacao}"
+							id="justificativa" />
+					</div>
+
+
+
+
+				</div>
+
+
+				<div class="col-md-6">
+					<!-- USERS LIST -->
+					<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title">
+								<Strong>Membros Do Projeto</Strong>
+							</h3>
+
+							<div class="box-tools pull-right">
+
+								<p:commandButton icon="fa fa-plus" class="btn-primary btn-xs"
+									data-toggle="modal" data-target="#modal-default"
+									onclick="PF('dlg2').show();" />
+
+
+
+							</div>
+
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body no-padding">
+							<ul class="users-list clearfix">
+
+								<ui:repeat var="lista" value="#{projetoBean.lista}">
+									<li><img
+										src="data:image/png;base64,#{usuarioBean.imageContentsAsBase64}"
+										alt="User Image" /> <a class="users-list-name" href="#">#{lista}</a>
+										<span class="users-list-date">Today</span></li>
+								</ui:repeat>
+
+
+							</ul>
+							<!-- /.users-list -->
+						</div>
+						<!-- /.box-body -->
+						<div class="box-footer text-center">
+							<a href="javascript:void(0)" class="uppercase">Ver Todos os
+								Membros</a>
+						</div>
+						<!-- /.box-footer -->
+					</div>
+					<!--/.box -->
+				</div>
+			</div>
+
+	</div>
+	</ui:define>
+
+</ui:composition>
+
+</html>

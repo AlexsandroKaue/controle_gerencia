@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Conectar computador </STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="Conectar" action="#{graficoBean.showGraficoPanel}" update="@form"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+				
+			<p:commandButton class="btn btn-error btn-md"
+				value="Notificar" action="#{graficoBean.notificar}" update="@form"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+				
+			<p:commandButton title="#{msg['editar']}"
+				class="btn btn-error btn-md" action="#{graficoBean.consumeWebServiceMemoria}" onclick="PF('dlg1').show();" />
+											
+		</div>
+	</ui:define>
+
+
+	<ui:define name="corpo">
+			
+		<p:dialog header="Filtro de Solicitante" widgetVar="dlg1" modal="true" id="memoriaDialog">
+		
+			<div class="box-body">
+				
+				<div class="form-group">
+					<label>Memória Global Disponível</label>
+					<h:outputText value="#{graficoBean.memoria.memoriaGlobalDisponivel}"></h:outputText>
+				</div>
+				
+				<div class="form-group">
+					<label>Memória Global Total</label>
+					<h:outputText value="#{graficoBean.memoria.memoriaGlobalTotal}"></h:outputText>
+				</div>
+				
+			</div>
+			<!-- /.box-body -->
+			
+			<div class="box-footer">
+				<div class="pull-right box-tools">
+
+					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+						onclick="PF('dlg1').hide();" />
+				</div>
+			</div>
+		</p:dialog>
+		
+	</ui:define>
+
+</ui:composition>
+
+</html>

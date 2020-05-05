@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+
+	<ui:define name="nome_pagina">
+
+		<h1>
+			<STRONG> Cadastro de Usuário </STRONG>
+		</h1>
+
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton class="btn btn-danger btn-md"
+				value="#{msg['voltar']}" action="#{usuarioBean.showFormListar}"
+				immediate="true" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['salvar']}" action="#{usuarioBean.salvar}"
+				update="@form" rendered="#{usuarioBean.viewState eq 'NOVO'}"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+
+			<p:commandButton class="btn btn-primary btn-md"
+				value="#{msg['atualizar']}" action="#{usuarioBean.alterar}"
+				update=":messages" 
+				rendered="#{usuarioBean.viewState eq 'EDITAR'}"
+				oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')"/>
+		</div>
+	</ui:define>
+
+
+	<ui:define name="corpo">
+
+		<f:metadata>
+			<f:viewAction action="#{usuarioBean.initForm(param.usuarioId)}" />
+		</f:metadata>
+
+		<div class="box-body">
+			<div class="row">
+				<!-- DIV DA Coluna -->
+
+				<!-- <div class="col-md-4">
+					<div class="form-group">
+						<label>Foto</label>
+						<p:panel id="foto" style="margin-bottom:20px">
+							<ui:fragment rendered="#{not empty usuarioBean.image}">
+								<img
+									src="data:image/png;base64,#{usuarioBean.imageContentsAsBase64}"
+									width="100%" />
+							</ui:fragment>
+							<p:fileUpload
+								fileUploadListener="#{usuarioBean.handleFileUpload}"
+								mode="advanced" update="foto" auto="true"
+								allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+						</p:panel>
+
+					</div>
+				</div> -->
+
+				<div class="col-md-8">
+
+					<!-- DIV DO ELEMTNO -->
+					<div class="form-group">
+						<label>#{msg['usuario.nome']}</label>
+						<p:inputText maxlength="45" styleClass="form-control"
+							label="#{msg['usuario.nome']}"
+							value="#{usuarioBean.usuario.nome}" required="true" id="nome" />
+
+
+					</div>
+
+				</div>
+				<!-- DIV DA LINHA -->
+
+				<div class="col-md-8">
+					<div class="form-group">
+						<label>#{msg['usuario.login']}</label>
+						<p:inputText maxlength="15" styleClass="form-control"
+							label="#{msg['usuario.login']}"
+							value="#{usuarioBean.usuario.login}" required="true" id="login" />
+					</div>
+				</div>
+
+				<div class="col-md-8">
+					<div class="form-group">
+						<label>#{msg['usuario.email']}</label>
+						<p:inputText maxlength="50" styleClass="form-control"
+							label="#{msg['usuario.email']}"
+							value="#{usuarioBean.usuario.email}" required="true" id="email" />
+					</div>
+				</div>
+
+				<ui:fragment rendered="#{usuarioBean.viewState eq 'NOVO'}">
+					<div class="col-md-8">
+						<div class="form-group">
+							<label>#{msg['usuario.senha']}</label>
+
+							<p:password id="senha" maxlength="20" styleClass="form-control"
+								value="#{usuarioBean.usuario.senha}" match="confSenha"
+								required="true" validatorMessage="Senha de confirmação deve ser igual a nova senha"/>
+						</div>
+					</div>
+
+					<div class="col-md-8">
+						<div class="form-group">
+							<label>#{msg['usuario.confirmarSenha']}</label>
+
+							<p:password id="confSenha" maxlength="20"
+								styleClass="form-control" value="#{usuarioBean.usuario.senha}"
+								required="true" />
+						</div>
+					</div>
+				</ui:fragment>
+				
+				<ui:fragment rendered="#{usuarioWeb.temPermissao('ALTERAR_GRUPO')}">
+					<div class="col-md-8">
+						<div class="form-group">
+							<label>#{msg['usuario.grupo']}</label>
+	
+							<p:selectOneMenu class="form-control select2" filter="true"
+								value="#{usuarioBean.usuario.grupo}" converter="genericCvt"
+								required="true" id="grupo">
+								<f:attribute name="itens" value="#{usuarioBean.grupoList}" />
+								<f:selectItem itemValue="" itemLabel="#{msg['global.selecione']}"
+									class="form-control select2" />
+								<f:selectItems value="#{usuarioBean.grupoList}" var="grupo"
+									itemValue="#{grupo}" itemLabel="#{grupo.nome}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					
+					<div class="col-md-8">
+						<div class="form-group">
+							<label>#{msg['usuario.ativo']}</label>
+							<p:selectOneMenu value="#{usuarioBean.usuario.ativo}"
+								class="form-control select2" id="ativo" required="true">
+								<f:attribute name="itens" value="#{usuarioBean.enumAtivoList}" />
+								<f:selectItems value="#{usuarioBean.enumAtivoList}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+				</ui:fragment>
+
+			</div>
+
+		</div>
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

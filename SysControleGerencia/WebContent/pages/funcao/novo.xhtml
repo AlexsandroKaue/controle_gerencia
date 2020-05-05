@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<ui:composition template="/index.xhtml">
+	
+		<ui:define name="nome_pagina">
+			<h1>
+				<STRONG>Cadastro de Função de Funcionário </STRONG>
+			</h1> 
+		</ui:define>
+	
+		<ui:define name="botoes">
+			<div class="pull-right box-tools">
+			
+				<p:commandButton class="btn btn-danger btn-md"
+					value="#{msg['voltar']}" action="#{funcaoFuncionarioBean.showFormListar}"
+					immediate="true" />
+	
+				<p:commandButton class="btn btn-primary btn-md"
+					value="#{msg['salvar']}" action="#{funcaoFuncionarioBean.salvar}"
+					update="@form"
+					rendered="#{funcaoFuncionarioBean.viewState eq 'NOVO'}"
+					oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')" />
+					
+				<p:commandButton class="btn btn-primary btn-md"
+					value="#{msg['atualizar']}" action="#{funcaoFuncionarioBean.alterar}"
+					update=":messages"
+					rendered="#{funcaoFuncionarioBean.viewState eq 'EDITAR'}"
+					oncomplete="setTimeout(function(){$('[id$=messages]').fadeOut()},'5000')"  />
+			</div>
+		</ui:define>
+	
+		
+		<ui:define name="corpo">
+			
+			<f:metadata>
+				<f:viewAction action="#{funcaoFuncionarioBean.initForm(param.funcaoFuncionarioId)}" />
+			</f:metadata>
+
+			<!-- DIV PRINCIPAL -->
+			<div class="box-body">
+				<div class="row">
+				
+					<!-- DIV DA Coluna -->
+					<div class="col-md-12"> <!-- -->
+						<div class="form-group">
+							<label>#{msg['descricao']}</label>
+							<p:inputText maxlength="100" styleClass="form-control"
+								label="#{msg['descricao']}"
+								value="#{funcaoFuncionarioBean.funcaoFuncionario.descricao}" required="true" />
+						</div>
+					</div>
+					
+					<div class="col-md-4">
+						<!-- DIV DO ELEMTNO -->
+						<div class="form-group">
+							<label>#{msg['codigo']}</label>
+							<p:inputText maxlength="45" styleClass="form-control"
+								label="#{msg['codigo']}" value="#{funcaoFuncionarioBean.funcaoFuncionario.codigo}"
+								required="true" id="nome"/>
+						</div>
+
+					</div>
+					
+					<!-- DIV DA LINHA -->
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>CBO</label>
+							<p:inputText maxlength="6" styleClass="form-control"
+								label="#{msg['funcaoFuncionario.cbo']}"
+								value="#{funcaoFuncionarioBean.funcaoFuncionario.cbo}" required="true" >
+							</p:inputText>
+						
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</ui:define>
+	
+	</ui:composition>
+
+</html>

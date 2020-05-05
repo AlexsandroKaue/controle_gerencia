@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Indicadores</STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton class="btn btn-primary btn-md"
+				value="Visualizar informações" onclick="PF('dlg1').show()"
+				immediate="true"
+				 /><!-- rendered="#{usuarioWeb.temPermissao('INCLUIR_GRUPO')}" -->
+		</div>
+	</ui:define>  
+	
+	<ui:define name="corpo">
+
+		<ui:fragment rendered="true"><!-- "#{usuarioWeb.temPermissao('LISTAR_GRUPO')}" -->
+			<!-- <div class="box box-widget collapsed-box">
+				<div class="box-header with-border">
+					<div class="user-block">
+						<ul class="sidebar-menu">
+							<li class="active"><i class="fa fa-search"></i> <label><b>#{msg['filtros']}</b></label></li>
+						</ul>
+					</div>
+
+					/.user-block
+					<div class="box-tools">
+						<button type="button" class="btn btn-box-tool"
+							data-widget="collapse">
+							<i class="fa fa-plus"></i>
+						</button>
+
+					</div>
+
+				</div>
+
+				/.box-header
+				<div class="box-body">
+					<div class="pull-right">
+
+						<p:commandButton action="#{sensorBean.limparFiltros}" process="@form" update="tbtbSensores pesquisa inicioViagem fimViagem gerencia" value="Limpar"
+							class="btn btn-danger btn-xs">
+						</p:commandButton>
+
+
+						<p:commandButton class="btn btn-primary btn-xs" update="tbDeslocamento solicitanteDialog"
+							value="#{msg['filtrar']}" action="#{sensorBean.listar}" />
+						<br />
+					</div>
+
+					<div class="row">
+
+						DIV DA Coluna
+						<div class="col-md-6">
+							DIV DO ELEMTNO
+							<div class="form-group">
+								<label><b>Número Processo ou Case</b></label>
+								<p:inputText id="pesquisa" maxlength="100"
+									styleClass="form-control" label="#{msg['descricao']}"
+									value="#{sensorBean.pesquisa}" />
+							</div>
+						</div>
+
+					</div>
+					
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label><b>Data Inicial</b></label> <br />
+								<p:calendar id="inicioViagem" pattern="dd/MM/yyyy" locale="pt" navigator="true"
+									value="#{sensorBean.dataInicioFILTRO}" >
+									<p:ajax event="dateSelect" update="fimViagem" listener="#{sensorBean.ajustaDataFinal()}" />
+								</p:calendar>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label><b>Data Final</b></label> <br />
+								<p:calendar id="fimViagem" pattern="dd/MM/yyyy" locale="pt" navigator="true"
+									value="#{sensorBean.dataFimFILTRO}" mindate="#{sensorBean.dtMin}"/>
+							</div>
+						</div>
+						
+						<div class="col-md-4">
+							<div class="form-group">
+								<label><b>Gerência</b></label>
+								<div class="material">
+									<p:selectOneMenu value="#{sensorBean.gerenciaFILTRO}" id="gerencia">
+
+										<f:selectItem itemValue="#{null}"
+											itemLabel="#{msg['global.selecione']}"
+											class="form-control select2" />
+										<f:selectItems value="" class="form-control select2" />
+										<f:selectItems value="#{sensorBean.status}" var="st"
+    										itemValue="#{st}" itemLabel="#{st.descricao}" class="form-control select2"/>
+
+									</p:selectOneMenu>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div> -->
+			
+			<p:dataTable id="tbSensores" rows="10" var="sensor" paginator="true"
+				value="#{sensorBean.sensorList}" paginatorPosition="bottom"
+				paginatorAlwaysVisible="false" emptyMessage="#{msg['lista.vazia']}" widgetVar="sensors">
+        		
+        		<p:column headerText="Cronômetro" styleClass="align-center" ><!-- filterBy="#{sensor.casee}" filterMatchMode="contains" -->
+			              #{sensor.nome}
+			        </p:column>
+			        
+			    <p:column headerText="Tempo médio" styleClass="align-center"><!--  filterBy="#{sensor.numeroProcesso}" filterMatchMode="contains" -->
+			              #{sensorBean.sensorService.obterTempoMedio(sensor)}
+			        </p:column>
+			        
+			    <p:column headerText="Contagens" styleClass="align-center"><!--  filterBy="#{sensor.numeroProcesso}" filterMatchMode="contains" -->
+			              #{sensorBean.sensorService.obterContagem(sensor)}
+			        </p:column>
+
+				<f:facet name="footer">
+					<h:outputText
+						value="#{msg['lista.totalRegistros']} #{sensorBean.sensorList.size()}" />
+				</f:facet>
+
+			</p:dataTable>
+
+		</ui:fragment>
+	</ui:define>
+
+</ui:composition>
+
+</html>

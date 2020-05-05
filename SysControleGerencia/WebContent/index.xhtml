@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>PROJETO TEMPLATE</title>
+	<!-- Bootstrap core CSS -->
+
+	<link rel="stylesheet" type="text/css"
+		href="#{request.contextPath}/resources/bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css"
+		href="#{request.contextPath}/resources/dist/css/AdminLTE.min.css" />
+	<link rel="stylesheet" type="text/css"
+		href="#{request.contextPath}/resources/dist/css/skins/skin-blue.min.css" />
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+	<link rel="stylesheet"
+		href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+
+	<link rel="stylesheet" type="text/css"
+		href="#{request.contextPath}/resources/css/_all-skins.min.css" />
+		
+	<link rel="stylesheet" type="text/css" 
+		href="#{request.contextPath}/resources/css/jquery.jqplot.min.css" />
+
+
+	<style type="text/css">
+.ui-panel-titlebar {
+	background: #00A65A;
+	border: none;
+}
+
+#fazendo .ui-panel-titlebar {
+	background: #000;
+	border: none;
+}
+
+.ui-panelgrid td,.ui-panelgrid tr {
+	border-style: none !important
+}
+</style>
+
+
+</h:head>
+<h:body class="hold-transition skin-blue sidebar-mini">
+
+	<div class="wrapper">
+
+		<!-- Main Header -->
+		<header class="main-header">
+
+
+			<!-- Logo -->
+			<p:commandLink action="#{usuarioWeb.paginaPrincipal}" class="logo">
+				<!-- mini logo for sidebar mini 50x50 pixels -->
+				<span class="logo-mini">PT</span>
+				<!-- logo for regular state and mobile devices -->
+				<span class="logo-lg"> PROJETO TEMPLATE </span>
+			</p:commandLink>
+
+			<!-- Header Navbar -->
+			<nav class="navbar navbar-static-top" role="navigation">
+				<!-- Sidebar toggle button-->
+				<a href="#" class="sidebar-toggle" data-toggle="offcanvas"
+					role="button"> <span class="sr-only">Toggle navigation</span>
+				</a>
+				<!-- Navbar Right Menu -->
+
+
+				<div class="navbar-custom-menu">
+					<ul class="nav navbar-nav">
+
+						<li class="dropdown notifications-menu"><a href="#"
+							class="dropdown-toggle" data-toggle="dropdown"> <i
+								class="fa fa-bell-o"></i> <span class="label label-danger"></span>
+						</a>
+							<ul class="dropdown-menu">
+								<li class="header">Notificações</li>
+								<li>
+									<!-- inner menu: contains the actual data -->
+									<ul class="menu">
+
+
+										<li></li>
+
+									</ul>
+								</li>
+							</ul></li>
+
+
+						<!-- User Account Menu -->
+						<li class="dropdown user user-menu">
+							<!-- Menu Toggle Button --> <a href="#" class="dropdown-toggle"
+							data-toggle="dropdown"> <!-- The user image in the navbar-->
+								<h:graphicImage library="img" name="user2-160x160.png"
+									class="user-image" alt="User Image" /> <!-- hidden-xs hides the username on small devices so only the image appears. -->
+								<span class="hidden-xs">#{usuarioWeb.usuario.nome}</span>
+						</a>
+
+							<ul class="dropdown-menu">
+								<!-- The user image in the menu -->
+								<li class="user-header"><h:graphicImage library="img"
+										name="user2-160x160.png" class="img-circle" alt="User Image" />
+									<p>
+										#{usuarioWeb.usuario.nome} <small>#{usuarioWeb.usuario.grupo.nome}</small>
+									</p></li>
+								<!-- Menu Body -->
+
+								<!-- Menu Footer-->
+								<li class="user-footer">
+									<div class="pull-left">
+										<p:commandButton class="btn btn-default btn-flat"
+											value="Editar Conta" action="#{usuarioBean.editarConta}"
+											immediate="true" />
+									</div>
+									<div class="pull-right">
+										<p:commandButton class="btn btn-danger btn-md" value="Sair"
+											action="#{usuarioWeb.sair}" immediate="true" />
+									</div>
+								</li>
+							</ul>
+						</li>
+
+						<!-- Control Sidebar Toggle Button -->
+						<li></li>
+					</ul>
+				</div>
+
+
+			</nav>
+		</header>
+		<!-- Left side column. contains the logo and sidebar -->
+		<aside class="main-sidebar">
+
+			<!-- sidebar: style can be found in sidebar.less -->
+			<section class="sidebar">
+
+				<!-- Sidebar user panel (optional) -->
+				<div class="user-panel">
+					<div class="pull-left image">
+						<h:graphicImage library="img" name="user2-160x160.png"
+							class="img-circle" alt="User Image" />
+					</div>
+					<div class="pull-left info">
+						<p>#{usuarioWeb.usuario.nome}</p>
+						<!-- Status -->
+
+					</div>
+				</div>
+
+
+
+
+				<!-- /.search form -->
+
+				<!-- Sidebar Menu -->
+
+
+
+
+
+
+				<ul class="sidebar-menu" data-widget="tree">
+
+					<li class="treeview"><a href="#"> <i class="fa fa-gears"></i>
+							<span>ADMINISTRAÇÃO</span> <span class="pull-right-container">
+								<i class="fa fa-angle-left pull-right"></i>
+						</span>
+					</a>
+						<ul class="treeview-menu">
+							<li class="active"><p:link outcome="/pages/usuario/lista">
+									<i class="glyphicon glyphicon-user"></i>
+									<span>Usuários</span>
+								</p:link></li>
+
+
+							<li class="active"><p:link outcome="/pages/grupo/lista">
+									<i class="glyphicon glyphicon-th"></i>
+									<span>Grupos</span>
+								</p:link></li>
+
+							<li class="active"><p:link outcome="/pages/permissao/lista">
+									<i class="glyphicon glyphicon-check"></i>
+									<span>Permissões</span>
+								</p:link></li>
+								
+							<!-- <li class="active"><p:link outcome="/pages/deslocamentos/lista">
+									<i class="glyphicon glyphicon-check"></i>
+									<span>Movimentações</span>
+								</p:link></li>
+								
+							<li class="active"><p:link outcome="/pages/usuarioBizagi/lista">
+									<i class="glyphicon glyphicon-check"></i>
+									<span>Usuários Bizagi</span>
+								</p:link></li> -->
+								
+							<li class="active"><p:link outcome="/pages/tarefa/lista">
+									<i class="glyphicon glyphicon-check"></i>
+									<span>Tarefas</span>
+								</p:link></li>
+								
+							<li class="treeview"><a href="#"> <i class="fa fa-gears"></i>
+								<span>Sensores</span> <span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+								</span>
+							</a>
+								<ul class="treeview-menu">
+									<li class="active"><p:link outcome="/pages/sensor/lista">
+									<i class="glyphicon glyphicon-check"></i>
+									<span>Solicitação de Outorga</span>
+									</p:link></li>
+								</ul>
+							</li>
+							
+							<li class="active"><p:link outcome="/pages/indicadores/lista">
+									<i class="glyphicon glyphicon-check"></i>
+									<span>Indicadores</span>
+								</p:link></li>
+
+						</ul></li>
+
+
+
+
+
+
+
+
+
+
+
+				</ul>
+				<!-- /.sidebar-menu -->
+
+				<!-- /.sidebar-menu -->
+			</section>
+			<!-- /.sidebar -->
+		</aside>
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<h:form id="formGeral" prependId="false" enctype="multipart/form-data">
+
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+
+					<ui:insert name="nome_pagina" />
+
+					<ol class="breadcrumb">
+						<ui:insert name="botoes" />
+					</ol>
+
+				</section>
+
+				<!-- Main content -->
+				<section class="content">
+					<BR />
+					<p:messages id="messages" closable="true" />
+
+					<!-- Your Page Content Here -->
+					<ui:insert name="corpo" />
+
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+						styleClass="box-warning">
+						<div style="margin-left: 10px;">
+							<p:commandButton value="Sim" type="button"
+								styleClass="btn-primary ui-confirmdialog-yes" icon="fa fa-check" />
+							<p:commandButton value="Não" type="button"
+								styleClass="btn-danger ui-confirmdialog-no" icon="fa fa-close" />
+						</div>
+					</p:confirmDialog>
+
+				</section>
+				<!-- /.content -->
+
+			</h:form>
+		</div>
+		<!-- /.content-wrapper -->
+
+		<!-- Main Footer -->
+		<footer class="main-footer">
+			<!-- To the right -->
+			<div class="pull-right hidden-xs"></div>
+			<!-- Default to the left -->
+			<div class="pull-right hidden-xs"></div>
+			<strong>Bird - Todos os Direitos Reservados</strong>
+
+		</footer>
+
+		<!-- Control Sidebar -->
+
+		<!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+	</div>
+	<!-- ./wrapper -->
+
+	<!-- REQUIRED JS SCRIPTS -->
+
+
+
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/bootstrap/js/jquery.min.js"></script>
+	
+	<script type="text/javascript" 
+		src="#{request.contextPath}/resources/js/jquery.jqplot.min.js"></script>
+		
+	<script type="text/javascript" 
+		src="#{request.contextPath}/resources/js/jqplot.canvasOverlay.js"></script>
+
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/dist/js/app.min.js"></script>
+		
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/jquery.maskMoney.js"></script>
+
+	<script type="text/javascript"
+		src="#{request.contextPath}/jquery.sparkline.min.js"></script>
+		
+
+
+</h:body>
+
+</html>

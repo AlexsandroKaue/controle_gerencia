@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/index.xhtml">
+
+
+	<ui:define name="nome_pagina">
+		<h1>
+			<STRONG>Graficos do Monitoramento</STRONG>
+		</h1>
+	</ui:define>
+
+	<ui:define name="botoes">
+		<div class="pull-right box-tools">
+			<p:commandButton styleClass="btn-block btn-primary" value="Add"
+				action="#{graficoBean.addNewValue}"
+				rendered="#{usuarioWeb.temPermissao('INCLUIR_USUARIO')}">
+			</p:commandButton>
+		</div>
+	</ui:define>
+
+	<ui:define name="acessoNaoPermitido">
+		<ui:fragment rendered="#{!usuarioWeb.temPermissao('LISTAR_USUARIO')}">
+			<div>
+				<h1 class="login-box-msg">
+					<h:graphicImage library="img" name="aviso.png" alt="User Image"
+						class="img-circle" />
+					<STRONG>#{msg['acesso.nao.permitido']}</STRONG>
+				</h1>
+			</div>
+		</ui:fragment>
+	</ui:define>
+
+	<ui:define name="corpo">
+	
+		<f:metadata>
+			<f:viewAction action="#{graficoBean.initForm(param.maquinaIp)}" />
+		</f:metadata>
+		
+		<p:dialog header="Informações Memórias" widgetVar="dlg1" modal="true" id="memoriaDialog">
+		
+			<div class="box-body">
+			</div>
+			<!-- /.box-body -->
+
+			<div class="box-footer">
+				<div class="pull-right box-tools">
+
+					<p:commandButton class="btn btn-danger btn-md" value="Fechar"
+						onclick="PF('dlg1').hide();" />
+				</div>
+			</div>
+		</p:dialog>
+
+		<ui:fragment rendered="#{usuarioWeb.temPermissao('LISTAR_USUARIO')}">
+
+
+			<p:poll autoStart="true" interval="1" listener="#{graficoBean.updateInfo}" oncomplete="handleComplete(xhr, status, args)" 
+				update="memoriaEmUso memoriaDisponivel utilizacaoCpu numeroProcessos numeroThreads uptime nucleosFisicos nucleosLogicos discoModelo discoNome discoCapacidade"/>
+
+			<div class="col-md-12">
+
+				<section class="content">
+					<!-- <p:remoteCommand name="solicitarNovoValorMemJS"
+						actionListener="#{graficoBean.solicitarNovoValorMem}" /> -->
+
+					<!-- <p:remoteCommand name="requestMemUpdate"
+						action="#{graficoBean.prepareMemUpdate()}"
+						oncomplete="updateMemChart(xhr,status,args)" update="memoriaEmUso memoriaDisponivel"></p:remoteCommand> -->
+						
+					<!-- <p:poll autoStart="true" interval="1" listener="#{graficoBean.prepareMemUpdate()}" oncomplete="handleMemoryComplete(xhr, status, args)" update="memoriaEmUso memoriaDisponivel"/> -->
+						
+					<div class="row">
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="box box-danger">
+
+
+									<div class="box-header with-border">
+										<i class="fa fa-bar-chart-o"></i>
+
+										<h3 class="box-title">Memória</h3>
+
+										<div class="box-tools pull-right">
+
+											<button type="button" class="btn btn-box-tool"
+												data-widget="collapse">
+												<i class="fa fa-minus"></i>
+											</button>
+											<button type="button" class="btn btn-box-tool"
+												data-widget="remove">
+												<i class="fa fa-times"></i>
+											</button>
+
+										</div>
+									</div>
+									<div class="box-body">
+										<span class="direct-chat-timestamp pull-left"
+											style="font-size: 12px;">% de utilização</span><br />
+										<p:panel id="ramPanel">	
+											<div id="ram" style="height: 300px;"></div>
+										</p:panel>
+									</div>
+									<div class="box-footer">
+									
+										<div class="row">
+											<!-- /.col -->
+											<div class="col-md-6">
+												<div class="description-block border-right">
+													<div class="row">
+														<div class="col-md-4">
+															<span class="direct-chat-timestamp pull-left"
+																style="font-size: 12px;">Em uso: </span><br />
+															<span class="direct-chat-timestamp pull-left"
+																style="font-size: 12px;">Disponível: </span><br/>
+															<span class="direct-chat-timestamp pull-left"
+																style="font-size: 12px;"></span><br/>
+														</div>
+														<div class="col-md-8" align="left">
+															<span class="description-text  pull-left"><h:outputText id="memoriaEmUso" value="#{graficoBean.memoriaEmUso}"></h:outputText></span><br/>
+														    <span class="description-text  pu ll-left"><h:outputText id="memoriaDisponivel" value="#{graficoBean.memoriaDisponivel}"></h:outputText></span>
+														    <span class="description-text"></span><br/>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+										</div>
+										
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					
+					<!-- <p:poll autoStart="true" interval="1" listener="#{graficoBean.prepareCpuUpdate()}" oncomplete="handleCpuComplete(xhr, status, args)" update="utilizacaoCpu numeroProcessos numeroThreads uptime nucleosFisicos nucleosLogicos"/> -->
+
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="box box-primary">
+									<div class="box-header with-border">
+										<i class="fa fa-bar-chart-o"></i>
+
+										<h3 class="box-title">CPU</h3>
+
+										<div class="box-tools pull-right">
+											<button type="button" class="btn btn-box-tool"
+												data-widget="collapse">
+												<i class="fa fa-minus"></i>
+											</button>
+											<button type="button" class="btn btn-box-tool"
+												data-widget="remove">
+												<i class="fa fa-times"></i>
+											</button>
+										</div>
+									</div>
+									
+									
+									<div class="box-body">
+									
+										<div class="row">
+											<div class="col-md-12">
+											<div class="row">
+												<div class="col-md-6">
+													<span class="direct-chat-timestamp pull-left"
+														style="font-size: 12px;">% de utilização</span><br />
+												</div>
+												<div class="col-md-6">
+													<span class="direct-chat-timestamp pull-right"
+														style="font-size: 12px;">#{graficoBean.descricaoCpu}</span>
+												</div>
+											</div>
+										
+										<p:panel id="cpuPanel">
+											<div id="cpu" style="height: 300px;"></div>
+										</p:panel>
+										
+										</div>
+										
+										
+										<div class="col-md-4" align="center">
+											<div class="row">
+												<!-- <p:chart itype="metergauge" model="#{graficoBean.temperaturaCpu}" responsive="true" style="width:140px;height:110px;"/>
+										
+												<p:chart type="metergauge" model="#{graficoBean.voltagemCpu}" responsive="true" style="width:140px;height:110px;"/>
+												
+												<p:chart type="metergauge" model="#{graficoBean.velocidadeFan}" responsive="true" style="width:140px;height:110px;"/> -->
+											</div>
+	                  							
+	                							
+	                					</div>    
+										
+										</div>
+									</div>
+
+									<div class="box-footer">
+									
+										<div class="row">
+											<!-- /.col -->
+											<div class="col-md-6">
+												<div class="description-block border-right">
+													<div class="row">
+														<div class="col-md-4">
+															<span class="direct-chat-timestamp pull-left"
+																style="font-size: 12px;">Utilização: </span><br />
+															<span class="direct-chat-timestamp pull-left"
+																style="font-size: 12px;">Processos: </span><br/>
+															<span class="direct-chat-timestamp pull-left"
+																style="font-size: 12px;">Threads: </span><br/>
+														</div>
+														<div class="col-md-8" align="left">
+															<span class="description-text  pull-left"><h:outputText id="utilizacaoCpu" value="#{graficoBean.usoCpu}%"></h:outputText></span><br />
+														    <span class="description-text pull-left"><h:outputText id="numeroProcessos" value="#{graficoBean.numeroProcessos}"></h:outputText></span><br />
+														    <span class="description-text pull-left"><h:outputText id="numeroThreads" value="#{graficoBean.numeroThreads}"></h:outputText></span><br />
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<div class="col-md-6">
+												<div class="description-block">
+													<div class="row">
+														<div class="col-md-4">
+															<span class="direct-chat-timestamp pull-left"
+																style="font-size: 12px;">Núcleos físicos: </span><br />
+															<span class="direct-chat-timestamp pull-left"
+																style="font-size: 12px;">Núcleos lógicos: </span><br/>
+															<span class="direct-chat-timestamp pull-left"
+																style="font-size: 12px;">Tempo de atividade: </span><br/>
+														</div>
+														<div class="col-md-8" align="left">
+															<span class="description-text  pull-left"><h:outputText id="nucleosFisicos" value="#{graficoBean.nucleosFisicos}"></h:outputText></span><br />
+														    <span class="description-text pull-left"><h:outputText id="nucleosLogicos" value="#{graficoBean.nucleosLogicos}"></h:outputText></span><br />
+														    <span class="description-text pull-left"><h:outputText id="uptime" value="#{graficoBean.uptime}"></h:outputText></span><br />
+														</div>
+													</div>
+												</div>
+											</div>
+											
+										</div>
+									
+										<!-- /.row -->
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					</div>
+
+					<!-- Donut chart -->
+					<DIV class="row">
+					<div class="col-md-6">
+
+						<div class="box box-warning">
+							<div class="box-header with-border">
+								<i class="fa fa-bar-chart-o"></i>
+
+								<h3 class="box-title">Utilização do Disco</h3>
+
+								<div class="box-tools pull-right">
+									<button type="button" class="btn btn-box-tool"
+										data-widget="collapse">
+										<i class="fa fa-minus"></i>
+									</button>
+									<button type="button" class="btn btn-box-tool"
+										data-widget="remove">
+										<i class="fa fa-times"></i>
+									</button>
+								</div>
+							</div>
+
+							<div class="box-body">
+
+								<div class="col-md-5">
+									<div class="col-md-12">
+									
+										<ul class="chart-legend clearfix">
+												<li><i class="fa fa-circle-o" style="color: #F0E68C"></i>
+													Espaço usado</li>
+												<li><i class="fa fa-circle-o" style="color: #DCDCDC"></i>
+													Espaço livre</li>
+										</ul>
+										
+										<p:panel id="donutPanel">
+											<div id="donut-chart" style="height: 200px;" align="left"></div>
+										</p:panel>											
+									
+											
+									</div>
+
+								</div>
+								
+								<div class="table-responsive">
+					                <table class="table table-striped">
+					                  <thead>
+					                  <tr>
+					                    <th>Nome</th>
+					                    <th>Em uso</th>
+					                    <th>Total</th>
+					                    <th>Sistema de Arquivos</th>
+					                  </tr>
+					                  </thead>
+					                  <tbody>
+					                  
+							                <ui:repeat var="particao" value="#{graficoBean.particaoList}" varStatus="status">
+									   			 <tr>
+										    		<td>
+											    		<p:commandLink id="ajax" update="donutPanel" actionListener="#{graficoBean.selecionaParticao(particao)}">
+													        <h:outputText value="#{particao.nome}" />
+													    </p:commandLink></td>
+										    		<td><h:outputText value="#{particao.emUso}" /></td>
+										    		<td><h:outputText value="#{particao.total}" /></td>
+										    		<td><h:outputText value="#{particao.fileSystem}" /></td>
+										    	 </tr>
+									    	</ui:repeat>
+							    	
+					                  </tbody>
+					                </table>
+					            </div>
+
+							</div>
+							
+							<div class="box-footer">
+										<div class="row">
+											<!-- /.col -->
+											<div class="col-md-12">
+												<div class="description-block">
+													<div class="row">
+														<div class="col-md-4">
+															<span class="direct-chat-timestamp pull-left"
+																style="font-size: 12px;">Modelo: </span><br />
+															<span class="direct-chat-timestamp pull-left"
+																style="font-size: 12px;">Taxa de transferência(ms): </span><br/>
+															<span class="direct-chat-timestamp pull-left"
+																style="font-size: 12px;">Capacidade: </span><br/>
+														</div>
+														<div class="col-md-8" align="left">
+															<span class="description-text"><h:outputText id="discoModelo" value="#{graficoBean.discoModelo}"></h:outputText></span><br/> 
+														    <span class="description-text"><h:outputText id="discoNome" value="#{graficoBean.discoTaxa}"></h:outputText></span><br/>
+														    <span class="description-text"><h:outputText id="discoCapacidade" value="#{graficoBean.discoCapacidade}"></h:outputText></span><br/>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+										</div>
+										<!-- /.row -->
+									</div>
+						</div>
+
+					</div>
+					</DIV>
+					
+
+
+
+					<SCRIPT type="text/javascript">
+				
+						var ram_val = 0;
+						var cpu_val = 0;
+						
+						function handleComplete(xhr,status,args) {
+							ram_val = args.memoria
+							cpu_val = args.cpu
+							update_ram()
+							update_cpu()
+						}
+						
+						$(function () {
+						    /*
+						     * Flot Interactive Chart
+						     * -----------------------
+						     */
+						    // We use an inline data source in the example, usually data would
+						    // be fetched from a server
+						    var data = [], totalPoints = 60
+	
+						    function getRamData() {
+	
+						      if (data.length &gt; 0)
+						        data = data.slice(1)
+	
+						      // Do a random walk
+						      while (data.length &lt; totalPoints) {
+								data.push(ram_val);
+							  }
+	
+						      // Zip the generated y values with the x values
+						      var res = []
+						      for (var i = 0; i &lt; data.length; ++i) {
+						        res.push([i, data[i]])
+						      }
+	
+						      return res
+						    }
+	
+						    var ram_plot = $.plot('#ram', [getRamData()], {
+						      grid  : {
+						        borderColor: '#f3f3f3',
+						        borderWidth: 0.1,
+						        tickColor  : '#f3f3f3'
+						      },
+						      series: {
+						        shadowSize: 0, // Drawing is faster without shadows
+						        color     : '#f08080'
+						      },
+						      lines : {
+						        fill : true, //Converts the line chart to area chart
+						        color: '#f08080',
+						        linewidth: 5
+						      },
+						      yaxis : {
+						        min : 0,
+						        max : 100,
+						        show: true
+						      },
+						      xaxis : {
+						        show: false
+						      }
+						    })
+						   
+						    window.update_ram = function() {
+	
+						      ram_plot.setData([getRamData()])
+	
+						      // Since the axes don't change, we don't need to call plot.setupGrid()
+						      ram_plot.draw()
+						      
+						    }
+						    
+						    /*
+						     * END INTERACTIVE CHART
+						     */
+	
+						  })
+						  
+						  $(function () {
+							    /*
+							     * Flot Interactive Chart
+							     * -----------------------
+							     */
+							    // We use an inline data source in the example, usually data would
+							    // be fetched from a server
+							    var data = [], totalPoints = 60
+							    
+							    function getCpuData() {
+									
+								      if (data.length &gt; 0)
+								        data = data.slice(1)
+
+								      // Do a random walk
+								      while (data.length &lt; totalPoints) {
+										data.push(cpu_val);
+									  }
+
+								      // Zip the generated y values with the x values
+								      var res = []
+								      for (var i = 0; i &lt; data.length; ++i) {
+								        res.push([i, data[i]])
+								      }
+
+								      return res
+								}
+							    
+							    var cpu_plot = $.plot('#cpu', [getCpuData()], {
+							      grid  : {
+							        borderColor: '#f3f3f3',
+							        borderWidth: 0.25,
+							        tickColor  : '#f3f3f3'
+							      },
+							      series: {
+							        shadowSize: 0, // Drawing is faster without shadows
+							        color     : '#3c8dbc'
+							      },
+							      lines : {
+							        fill : true, //Converts the line chart to area chart
+							        color: '#3c8dbc'
+							      },
+							      yaxis : {
+							        min : 0,
+							        max : 100,
+							        show: true
+							      },
+							      xaxis : {
+							        show: false
+							      }
+							    })
+							    
+							    window.update_cpu = function() {
+									
+							    	  cpu_plot.setData([getCpuData()])
+
+								      // Since the axes don't change, we don't need to call plot.setupGrid()
+								      cpu_plot.draw()
+								      
+								}
+							    
+							    /*
+							     * END INTERACTIVE CHART
+							     */
+
+							  })
+							  
+							  $(function () {
+								
+								function getDonutData() {
+									
+									
+								}
+								
+				               var donut_plot = $.plot('#donut-chart', [getDonutData()], {
+				                 series: {
+				                   pie: {
+				                     show       : true,
+				                     radius     : 1,
+				                     label      : {
+				                       show     : true,
+				                       radius   : 2 / 3,
+				                       formatter: labelFormatter,
+				                       threshold: 0.1
+				                     }
+
+				                   }
+				                 },
+				                 legend: {
+				                   show: false
+				                 }
+				               })
+				               
+				               window.update_disco = function(discoUsed) {
+				            	   
+				            	   	  var donutData = [{ label: 'Series2', data: 50, color: '#F0E68C' },
+										             { label: 'Series3', data: 50, color: '#DCDCDC' }]
+									
+				            	   	  donut_plot.setData()
+
+								      // Since the axes don't change, we don't need to call plot.setupGrid()
+								      cpu_plot.draw()
+								      
+								}
+							  
+							  })
+							
+							
+							          
+						  /*
+						   * Custom Label formatter
+						   * ----------------------
+						   */
+						  function labelFormatter(label, series) {
+						    return '<div style="font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;">'
+						      + label
+						      + '<br/>'
+						      + Math.round(series.percent) + '%</div>'
+						  }
+					
+					</SCRIPT>
+
+
+				</section>
+			</div>
+
+		</ui:fragment>
+
+	</ui:define>
+
+
+</ui:composition>
+
+</html>

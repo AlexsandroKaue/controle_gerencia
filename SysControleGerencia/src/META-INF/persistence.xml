@@ -1,0 +1,31 @@
+
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+        http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+
+	<persistence-unit name="projTemplate">
+		<properties>
+
+			<!-- Propriedades JDBC -->
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+			 
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://172.31.136.122:5432/controle_gerencia" ></property>
+			<property name="javax.persistence.jdbc.user" value="postgres" />
+			
+		<property name="javax.persistence.jdbc.password" value="postgresDesenv" />
+			
+
+
+			<!-- Configuracoes especificas do Hibernate -->
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+			<property name="hibernate.hbm2ddl.auto" value="create-update" />		
+			
+			<property name="hibernate.show_sql" value="false" />
+			
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.enable_lazy_load_no_trans" value="true"/>
+		</properties>
+	</persistence-unit>
+</persistence>
